@@ -1,11 +1,12 @@
 import React, {useState, useEffect, useRef} from 'react';
-import {Avatar, Button, TextField, FormControlLabel, Checkbox, Link, Paper, Box, Grid, Typography, CssBaseline, createTheme, ThemeProvider, CircularProgress, FormLabel, Snackbar, FormControl, InputLabel, Select, MenuItem} from '@mui/material';
+import {Avatar, Button, TextField, FormControlLabel, Checkbox, Link, Paper, Box, Grid, Typography, CssBaseline, createTheme, ThemeProvider, CircularProgress, FormLabel, FormControl, InputLabel, Select, MenuItem} from '@mui/material';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import { Link as RouterLink, withRouter} from 'react-router-dom';
 import AvatarEdit from 'react-avatar-edit';
 import axios from 'axios';
+import Snackbar from '../snackbar/Snackbar';
 
-const Signup = () => {
+const Signup = (props) => {
 
   const theme = createTheme();
 
@@ -30,7 +31,7 @@ const Signup = () => {
   const [department, setDepartment] = useState(null);
 
   // Hook para mostrar el progress o boton de registrar.
-  const [showProgress] = useState(false);
+  const [showProgress, setshowProgress] = useState(false);
 
    // Labels y Hooks para las direcciones de correos.
    const inputLabel = useRef(null);
@@ -62,6 +63,7 @@ const Signup = () => {
     })
       .then(function (response) {
         console.log(response);
+        props.history.push('/login');
       })
       .catch(function (response) {
         console.log(response);
@@ -116,6 +118,8 @@ const Signup = () => {
 const handleSubmit = (e) => {
   e.preventDefault();
 
+  setshowProgress(true);
+
   peticionPost();
 };
 
@@ -145,6 +149,8 @@ if(elem.target.files[0].type === "image/jpeg" || elem.target.files[0].type === "
     setsnack({
         motive: 'warning', text: 'La imagen es demasiado grande, elija otra.', appear: true,
     });
+    console.log("Arriba");
+
     elem.target.value = "";
     return;
   };
@@ -156,6 +162,9 @@ if(elem.target.files[0].type === "image/jpeg" || elem.target.files[0].type === "
   setsnack({
       motive: 'error', text: 'Formato incorrecto. Elija una imagen.', appear: true,
   });
+
+  console.log("Abajo");
+
   return;
 }
 }
@@ -351,9 +360,9 @@ const handleModifiedDepartment = (event) => {
             </Grid>
           </Box>
           </Box>
-          <Copyright sx={{ mt: 5 }} />
+          <Box mt={5}><Copyright /></Box>
           {snack.appear?
-            <div> <Snackbar motive={snack.motive} text={snack.text}/> </div>
+            <div> <Snackbar motive={snack.motive} text={snack.text} appear={snack.appear}/> </div>
             : <div/>
           }
         </Grid>

@@ -1,10 +1,10 @@
-import React, {useState, useEffect, useRef} from 'react';
-import axios, {AxiosResponse} from 'axios';
+import React, {useEffect} from 'react';
+import axios from 'axios';
 import {Avatar, Button, TextField, FormControlLabel, Checkbox, Link, Paper, Box, Grid, Typography, CssBaseline, createTheme, ThemeProvider} from '@mui/material';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import { Link as RouterLink, withRouter} from 'react-router-dom';
 
-const Login = () => {
+const Login = (props) => {
 
 const theme = createTheme();
 
@@ -16,14 +16,37 @@ useEffect(() => {
     }));
 }, [])
 
+const peticionPost = (username, password) => {
+
+  console.log(username);
+  console.log(password);
+
+  var bodyFormData = new FormData();
+
+  bodyFormData.append('Username', username);
+  bodyFormData.append('Password', password);
+
+  axios({
+    method: "post",
+    url: "https://localhost:44322/api/auth/login",
+    data: bodyFormData,
+    headers: { "Content-Type": "multipart/form-data" },
+  })
+    .then(function (response) {
+      console.log(response);
+      props.history.push('/');
+    })
+    .catch(function (response) {
+      console.log(response);
+    });
+
+};
+
 const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    // eslint-disable-next-line no-console
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
+
+    peticionPost(data.get('username'), data.get('password'));
 };
 
   return (
@@ -60,15 +83,15 @@ const handleSubmit = (event) => {
             <Typography component="h1" variant="h5">
               Login de Empleado
             </Typography>
-            <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 1 }}>
+            <Box component="form" onSubmit={handleSubmit} sx={{ mt: 1 }}>
               <TextField
                 margin="normal"
                 required
                 fullWidth
-                id="email"
-                label="Correo Electronico"
-                name="email"
-                autoComplete="email"
+                id="username"
+                label="Usuario"
+                name="username"
+                autoComplete="username"
                 autoFocus
               />
               <TextField

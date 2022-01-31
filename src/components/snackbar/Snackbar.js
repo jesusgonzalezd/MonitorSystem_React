@@ -1,31 +1,25 @@
-import React, {useState} from 'react';
-import Snackbar from '@material-ui/core/Snackbar';
-import MuiAlert from '@material-ui/lab/Alert';
-// Importando Estilos.
-import {useStyles} from './styles';
+import * as React from 'react';
+import Snackbar from '@mui/material/Snackbar';
+import MuiAlert from '@mui/material/Alert';
 
-function Alert(props) {
-  return <MuiAlert elevation={6} variant="filled" {...props} />;
-}
+const Alert = React.forwardRef(function Alert(props, ref) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
 
-const CustomizeSnackbar = (props) => {
-
-  //Llamado de la Función de Estilos.
-  const classes = useStyles();
-
-  // Abrir o cerrar snackbar.
-  const [open, setOpen] = useState(true);
+const CustomizedSnackbars = (props) => {
+  const [open, setOpen] = React.useState(true);
 
   const handleClose = (event, reason) => {
-    if (reason === 'clickaway')
+    if (reason === 'clickaway') {
       return;
+    }
     setOpen(false);
   };
 
   return (
-    <div className={classes.root}>
-      <Snackbar open={open} autoHideDuration={1500} onClose={handleClose}>
-        <Alert onClose={handleClose} severity={props.motive}>
+    <div>
+      <Snackbar open={props.appear} autoHideDuration={1500} onClose={handleClose}>
+        <Alert onClose={handleClose} severity={props.motive} sx={{ width: '100%' }}>
           {props.text}
         </Alert>
       </Snackbar>
@@ -33,4 +27,4 @@ const CustomizeSnackbar = (props) => {
   );
 }
 
-export default CustomizeSnackbar;
+export default CustomizedSnackbars;
