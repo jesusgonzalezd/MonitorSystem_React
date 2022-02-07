@@ -1,24 +1,10 @@
-import * as React from 'react';
-import AppBar from '@mui/material/AppBar';
-import Box from '@mui/material/Box';
-import Toolbar from '@mui/material/Toolbar';
-import IconButton from '@mui/material/IconButton';
-import Typography from '@mui/material/Typography';
-import Menu from '@mui/material/Menu';
-import MenuIcon from '@mui/icons-material/Menu';
-import Container from '@mui/material/Container';
-import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
-import Tooltip from '@mui/material/Tooltip';
-import MenuItem from '@mui/material/MenuItem';
-import { useEffect, useState } from 'react';
+import React , {useState, useEffect} from 'react';
+import {AppBar, Box, Toolbar, IconButton, Typography, Container, Avatar, Button, Tooltip, Menu, MenuItem, Badge, ThemeProvider, createTheme, styled} from '@mui/material';
+import {DragHandle, AccountBox, Face, PhotoCamera, Logout, Map, ListAlt, ShareLocation} from '@mui/icons-material';
 import axios from 'axios';
-import AccountBoxIcon from '@mui/icons-material/AccountBox';
+import { withRouter } from 'react-router-dom';
 
-const pages = ['Opcion 1', 'Opcion 2', 'Opcion 3'];
-const settings = ['Profile', 'Account', 'Logout'];
-
-const ResponsiveAppBar = () => {
+const Header = (props) => {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
 
@@ -37,29 +23,98 @@ const ResponsiveAppBar = () => {
     setAnchorElUser(null);
   };
 
-   // Hook para almacenar las credenciales del usuario.
-   const [user, setUser] = useState({
+  const StyledBadge = styled(Badge)(({ theme }) => ({
+    '& .MuiBadge-badge': {
+      backgroundColor: '#44b700',
+      color: '#44b700',
+      boxShadow: `0 0 0 2px ${theme.palette.background.paper}`,
+      '&::after': {
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        width: '100%',
+        height: '100%',
+        borderRadius: '50%',
+        animation: 'ripple 1.2s infinite ease-in-out',
+        border: '1px solid currentColor',
+        content: '""',
+      },
+    },
+    '@keyframes ripple': {
+      '0%': {
+        transform: 'scale(.8)',
+        opacity: 1,
+      },
+      '100%': {
+        transform: 'scale(2.4)',
+        opacity: 0,
+      },
+    },
+  }));
+
+  const darkTheme = createTheme({
+    palette: {
+      mode: 'dark',
+      primary: {
+        main: '#1976d2',
+      },
+    },
+  });
+
+  // Usuario logueado en sistema.
+  const[userin, setUserin] = useState({
+    id: '',
+    firstname: '',
+    lastname: '',
     username: '',
-    password: ''
+    email: '',
+    department: '',
+    avatar: ''
   });
 
   useEffect(() => {
 
-    axios.get("https://localhost:44322/weatherforecast")
-      .then((response  => {
-        console.log(response.data);
-      }));
-  }, [])
+        axios.get("https://localhost:44322/api/auth/obtainuser/" + props.username)
+          .then((response  => {
+            console.log(response.data);
+
+            setUserin({
+              id: response.data.message.id,
+              firstname: response.data.message.firstName,
+              lastname: response.data.message.lastName,
+              username: response.data.message.userName,
+              email: response.data.message.email,
+              department: response.data.message.department,
+              avatar: response.data.message.avatar
+            });
+          }))
+          .catch(function (response) {
+            console.log(response);
+          });
+  }, [props.username]);
 
   const handleLogout = () => {
 
-
+    axios({
+      method: "post",
+      url: "https://localhost:44322/api/auth/logout",
+      headers: { "Content-Type": "multipart/form-data" },
+    })
+      .then(function (response) {
+        console.log(response);
+        props.history.push('/login');
+      })
+      .catch(function (response) {
+        console.log(response);
+      });
   };
 
   return (
+  <ThemeProvider theme={darkTheme}>
     <AppBar position="static">
       <Container maxWidth="xl">
         <Toolbar disableGutters>
+          <Avatar sx={{ width: 65, height: 65 }} src="https://i.gifer.com/4RzR.gif"/>
           <Typography
             variant="h6"
             noWrap
@@ -78,7 +133,7 @@ const ResponsiveAppBar = () => {
               onClick={handleOpenNavMenu}
               color="inherit"
             >
-              <MenuIcon />
+              <DragHandle />
             </IconButton>
             <Menu
               id="menu-appbar"
@@ -98,33 +153,43 @@ const ResponsiveAppBar = () => {
                 display: { xs: 'block', md: 'none' },
               }}
             >
-              <MenuItem onClick={handleLogout}><AccountBoxIcon/>Cambio de Avatar</MenuItem>
+              <MenuItem><Map/>Zonificacion</MenuItem>
+              <MenuItem><ListAlt/>Reportes</MenuItem>
+              <MenuItem><ShareLocation/>Ubicaciones</MenuItem>
             </Menu>
           </Box>
-          <Typography
-            variant="h6"
-            noWrap
-            component="div"
-            sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}
-          >
-            LOGO
-          </Typography>
+          
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-            {pages.map((page) => (
               <Button
-                key={page}
                 onClick={handleCloseNavMenu}
                 sx={{ my: 2, color: 'white', display: 'block' }}
-              >
-                {page}
+              ><Map/>
+                Zonificacion
               </Button>
-            ))}
+              <Button
+                onClick={handleCloseNavMenu}
+                sx={{ my: 2, color: 'white', display: 'block' }}
+              ><ListAlt/>
+                Reportes
+              </Button>
+              <Button
+                onClick={handleCloseNavMenu}
+                sx={{ my: 2, color: 'white', display: 'block' }}
+              ><ShareLocation/>
+                Ubicaciones
+              </Button>
           </Box>
 
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+              <StyledBadge
+                  overlap="circular"
+                  anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+                  variant="dot"
+                >
+                  <Avatar alt={userin.firstname + " " + userin.lastname} src=""/>
+              </StyledBadge>
               </IconButton>
             </Tooltip>
             <Menu
@@ -143,16 +208,22 @@ const ResponsiveAppBar = () => {
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
             >
-              {settings.map((setting) => (
-                <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                  <Typography textAlign="center">{setting}</Typography>
-                </MenuItem>
-              ))}
+              <MenuItem disabled><Face/>{userin.firstname + " " + userin.lastname}</MenuItem>
+              <MenuItem><AccountBox/>
+                <Typography textAlign="right">Perfil</Typography>
+              </MenuItem>
+              <MenuItem><PhotoCamera/>
+                <Typography textAlign="right">Cambio de Avatar</Typography>
+              </MenuItem>
+              <MenuItem onClick={handleLogout}><Logout/>
+                <Typography textAlign="right">Cerrar sesion</Typography>
+              </MenuItem>
             </Menu>
           </Box>
         </Toolbar>
       </Container>
     </AppBar>
+  </ThemeProvider>
   );
 };
-export default ResponsiveAppBar;
+export default withRouter(Header);

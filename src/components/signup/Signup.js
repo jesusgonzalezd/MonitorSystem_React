@@ -1,6 +1,5 @@
 import React, {useState, useEffect, useRef} from 'react';
 import {Avatar, Button, TextField, FormControlLabel, Checkbox, Link, Paper, Box, Grid, Typography, CssBaseline, createTheme, ThemeProvider, CircularProgress, FormLabel, FormControl, InputLabel, Select, MenuItem} from '@mui/material';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import { Link as RouterLink, withRouter} from 'react-router-dom';
 import AvatarEdit from 'react-avatar-edit';
 import axios from 'axios';
@@ -8,7 +7,14 @@ import Snackbar from '../snackbar/Snackbar';
 
 const Signup = (props) => {
 
-  const theme = createTheme();
+  const darkTheme = createTheme({
+    palette: {
+      mode: 'dark',
+      primary: {
+        main: '#1976d2',
+      },
+    },
+  });
 
    // Hook para almacenar la imagen del usuario.
    const [avatarC, setAvatar] = useState({
@@ -71,8 +77,8 @@ const Signup = (props) => {
   }
 
   useEffect(() => {
-    setDirection("@gmail.com");
-    setDepartment("Audiovisual");
+      setDirection("@gmail.com");
+      setDepartment("Audiovisual");
   }, []);
 
   // Evento HandleChange para modificar y asignar los datos al Hook.
@@ -149,7 +155,6 @@ if(elem.target.files[0].type === "image/jpeg" || elem.target.files[0].type === "
     setsnack({
         motive: 'warning', text: 'La imagen es demasiado grande, elija otra.', appear: true,
     });
-    console.log("Arriba");
 
     elem.target.value = "";
     return;
@@ -162,8 +167,6 @@ if(elem.target.files[0].type === "image/jpeg" || elem.target.files[0].type === "
   setsnack({
       motive: 'error', text: 'Formato incorrecto. Elija una imagen.', appear: true,
   });
-
-  console.log("Abajo");
 
   return;
 }
@@ -179,7 +182,7 @@ const handleModifiedDepartment = (event) => {
 };
 
   return (
-    <ThemeProvider theme={theme}>
+    <ThemeProvider theme={darkTheme}>
       <Grid container component="main" sx={{ height: '100vh' }}>
         <CssBaseline />
         <Grid
@@ -206,9 +209,8 @@ const handleModifiedDepartment = (event) => {
                   alignItems: 'center',
                 }}
             >
-            <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-              <LockOutlinedIcon />
-            </Avatar>
+            <Avatar sx={{ m: 1, width: 106, height: 106 }} src="https://i.pinimg.com/originals/d7/ae/01/d7ae0170d3d5ffcbaa7f02fdda387a3b.gif" />
+
             <Typography component="h1" variant="h5">
               Registro de Empleado
             </Typography>
@@ -353,7 +355,7 @@ const handleModifiedDepartment = (event) => {
             }
             <Grid container justifyContent="flex-end">
               <Grid item>
-              <Link to="/" component={React.forwardRef((props, ref) => <RouterLink innerRef={ref} {...props} />)} variant="body2">
+              <Link to="/login" component={React.forwardRef((props, ref) => <RouterLink innerRef={ref} {...props} />)} variant="body2">
                   Tienes una cuenta? Inicia sesion.
                 </Link>
               </Grid>

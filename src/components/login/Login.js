@@ -1,25 +1,62 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import axios from 'axios';
 import {Avatar, Button, TextField, FormControlLabel, Checkbox, Link, Paper, Box, Grid, Typography, CssBaseline, createTheme, ThemeProvider} from '@mui/material';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-import { Link as RouterLink, withRouter} from 'react-router-dom';
+import { Link as RouterLink, withRouter, Redirect} from 'react-router-dom';
 
 const Login = (props) => {
 
-const theme = createTheme();
+const darkTheme = createTheme({
+  palette: {
+    mode: 'dark',
+    primary: {
+      main: '#1976d2',
+    },
+  },
+});
+
+// Hook para verificar si hizo click al boton login y accedio de manera satisfactoria a su cuenta.
+const [login, setLogin] = useState(false);
+
+// Hook para almacenar las credenciales del usuario.
+const [user, setUser] = useState({
+  username: '',
+  password: ''
+});
+
+ // Cambio en la tarjeta del usuario, cada vez que alguien inicia sesion.
+ const handleChange = (e) => {
+
+  // Limites para la contrasena.
+  if(e.target.name === 'password' && e.target.value.length > 20)
+      return;
+
+  if(e.target.name === 'username' && e.target.value.length > 64)
+      return;
+
+  // Transforma el caracter ingresado a código ASCII.
+  var key = e.target.value.charCodeAt(e.target.value.length - 1);
+
+  // Validación del campo email.
+  if(e.target.name === 'username')
+    if( (key > 31 && key < 45) || (key > 57 && key < 64) || (key >= 64 && key < 95) || (key > 122 || key === 47 || key === 96)) return;
+
+   // Validación del campo contraseña.
+  if(e.target.name === 'password')
+    if((key > 126 || key === 32)) return;
+    
+  // Se almacena en el Hook.
+  setUser({
+    ...user,
+    [e.target.name]: e.target.value
+  });
+};
 
 useEffect(() => {
 
-  axios.get("https://localhost:44322/weatherforecast")
-    .then((response  => {
-      console.log(response.data);
-    }));
+  
 }, [])
 
 const peticionPost = (username, password) => {
-
-  console.log(username);
-  console.log(password);
 
   var bodyFormData = new FormData();
 
@@ -34,7 +71,8 @@ const peticionPost = (username, password) => {
   })
     .then(function (response) {
       console.log(response);
-      props.history.push('/');
+      //props.history.push('/');
+      setLogin(true);
     })
     .catch(function (response) {
       console.log(response);
@@ -50,7 +88,7 @@ const handleSubmit = (event) => {
 };
 
   return (
-    <ThemeProvider theme={theme}>
+    <ThemeProvider theme={darkTheme}>
       <Grid container component="main" sx={{ height: '100vh' }}>
         <CssBaseline />
         <Grid
@@ -77,9 +115,9 @@ const handleSubmit = (event) => {
               alignItems: 'center',
             }}
           >
-            <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-              <LockOutlinedIcon />
-            </Avatar>
+
+            <Avatar sx={{ m: 1, width: 106, height: 106 }} src="https://i.pinimg.com/originals/d7/ae/01/d7ae0170d3d5ffcbaa7f02fdda387a3b.gif" />
+
             <Typography component="h1" variant="h5">
               Login de Empleado
             </Typography>
@@ -93,6 +131,7 @@ const handleSubmit = (event) => {
                 name="username"
                 autoComplete="username"
                 autoFocus
+                onChange={handleChange}
               />
               <TextField
                 margin="normal"
@@ -103,6 +142,7 @@ const handleSubmit = (event) => {
                 type="password"
                 id="password"
                 autoComplete="current-password"
+                onChange={handleChange}
               />
               <FormControlLabel
                 control={<Checkbox value="remember" color="primary" />}
@@ -116,6 +156,18 @@ const handleSubmit = (event) => {
               >
                 Acceder
               </Button>
+
+              <div>
+              {login? (
+                          <Redirect
+                            to={{
+                                pathname: '/',
+                                state: { username: user.username }
+                            }}
+                          />
+                      ) : null}
+              </div>
+
               <Grid container>
                 <Grid item xs>
                   <Link href="#" variant="body2">
