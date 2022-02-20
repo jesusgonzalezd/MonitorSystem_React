@@ -1,36 +1,26 @@
 import React, {useEffect, useState} from 'react';
 import Header from '../header/Header';
-import {Map, GoogleApiWrapper, Marker, InfoWindow} from 'google-maps-react';
+import {Map, GoogleApiWrapper, Marker} from 'google-maps-react';
+//import useWatchLocation from "../location/useWatchLocation";
+//import { geolocationOptions } from "../../constants/geolocationOptions";
 
 const Home = (props) =>{
 
-  const[state, setState] = useState({
-      currentLocation: {lat: 18.476310, lng: -69.937382}
-  })
-
-  const [ubicacion, setUbicacion] = useState({
-      longitude: '',
-      latitude: ''
-  })
+  const [location, setLocation] = useState({ lat: "", lng: "", });
+  //const { location, error } = useWatchLocation(geolocationOptions);
 
   useEffect(() => {
-      navigator.geolocation.getCurrentPosition(
-        function (position) {
-            console.log(position.coords.longitude);
-            console.log(position.coords.latitude);
-            console.log(position.coords.accuracy);
+    if (navigator.geolocation) {
+        navigator.geolocation.watchPosition(function(position) {
+        console.log("Latitude is :", position.coords.latitude);
+        console.log("Longitude is :", position.coords.longitude);
 
-            setUbicacion({longitude: position.coords.longitude, latitude: position.coords.latitude})
-      }, 
-      function (error) {
-          console.log(error);
-      },
-      {
-        enableHighAccuracy: true,
-        timeout: 5000,
-        maximumAge: 0
-      }
-    );
+        setLocation({
+          lat: position.coords.latitude,
+          lng: position.coords.longitude,
+        });
+      });
+    }
   }, []);
 
 return(
@@ -38,11 +28,14 @@ return(
         <Header username={props.location.state.username}/>
         <Map google={props.google}
              style = {{width: "100%", height: "100%"}}
-             zoom = {10}
-             initialCenter = {state.currentLocation}>
+             zoom = {6}
+             initialCenter = {{lat: 18.762391, lng: -69.439192}}>
 
-             <Marker key="marker_1"
-                position={ubicacion.latitude, ubicacion.longitude} />
+             <Marker 
+                name={'Posicion Actual'} 
+                key="marker_1"
+                position={{lat: location.lat, lng: location.lng}}
+              />
         </Map>
 
   </div>
