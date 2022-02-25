@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import Header from '../header/Header';
-import {Map, GoogleApiWrapper, Marker} from 'google-maps-react';
+import {Map, GoogleApiWrapper, Marker, InfoWindow} from 'google-maps-react';
 //import useWatchLocation from "../location/useWatchLocation";
 //import { geolocationOptions } from "../../constants/geolocationOptions";
 
@@ -8,12 +8,17 @@ const Home = (props) =>{
 
   const [location, setLocation] = useState({ lat: "", lng: "", });
   //const { location, error } = useWatchLocation(geolocationOptions);
+  const [showInfoWindow, setshowInfoWindow] = useState({
+      activeMarker: {},
+      selectedPlace: {},
+      showing: false
+  });
 
   useEffect(() => {
     if (navigator.geolocation) {
         navigator.geolocation.watchPosition(function(position) {
-        console.log("Latitude is :", position.coords.latitude);
-        console.log("Longitude is :", position.coords.longitude);
+        //console.log("Latitude is :", position.coords.latitude);
+        //console.log("Longitude is :", position.coords.longitude);
 
         setLocation({
           lat: position.coords.latitude,
@@ -23,21 +28,62 @@ const Home = (props) =>{
     }
   }, []);
 
+  const onMarkerClick = (props, marker) =>
+    setshowInfoWindow({
+      activeMarker: marker,
+      selectedPlace: props,
+      showing: true
+    });
+
+  const onInfoWindowClose = () =>
+    setshowInfoWindow({
+      activeMarker: null,
+      selectedPlace: '',
+      showing: false
+    });
+
+  const onMapClicked = (t, map, coord) => {
+
+    // Obtener coordenadas con un click al mapa.
+    const { latLng } = coord;
+    const lat = latLng.lat();
+    const lng = latLng.lng();
+    console.log("Latitud: " + lat + " Longitud: " + lng);
+
+    if (showInfoWindow.showing)
+    setshowInfoWindow({
+        activeMarker: null,
+        selectedPlace: '',
+        showing: false
+      });
+  };
+
 return(
   <div>
         <Header username={props.location.state.username}/>
-        <Map google={props.google}
-             style = {{width: "100%", height: "100%"}}
-             zoom = {6}
-             initialCenter = {{lat: 18.762391, lng: -69.439192}}>
+        <Map className="map"
+             google={props.google}
+             onClick={onMapClicked}
+             style={{ height: "100%", width: "100%" }}
+             zoom={7}
+             initialCenter = {{lat: 18.762391, lng: -69.439192}}
+        >
+          <Marker
+            name={"Latitud: " + location.lat + " Longitud: " + location.lng}
+            onClick={onMarkerClick}
+            position={{ lat: location.lat, lng: location.lng }}
+          />
 
-             <Marker 
-                name={'Posicion Actual'} 
-                key="marker_1"
-                position={{lat: location.lat, lng: location.lng}}
-              />
-        </Map>
-
+          <InfoWindow
+            marker={showInfoWindow.activeMarker}
+            onClose={onInfoWindowClose}
+            visible={showInfoWindow.showing}
+          >
+            <div>
+              <h4>{showInfoWindow.selectedPlace.name}</h4>
+            </div>
+          </InfoWindow>
+      </Map>
   </div>
 )}
 
