@@ -68,8 +68,8 @@ return(
              google={props.google}
              onClick={onMapClicked}
              style={{ height: "100%", width: "100%" }}
-             zoom={7}
-             initialCenter = {{lat: 18.762391, lng: -69.439192}}
+             zoom={17}
+             initialCenter = {{lat: 18.538119, lng: -69.944318}}
         >
           <Marker
             name={"Latitud: " + location.lat + " Longitud: " + location.lng}

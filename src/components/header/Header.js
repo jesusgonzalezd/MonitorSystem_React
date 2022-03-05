@@ -1,6 +1,6 @@
 import React , {useState, useEffect} from 'react';
 import {AppBar, Box, Toolbar, IconButton, Typography, Container, Avatar, Button, Tooltip, Menu, MenuItem, Badge, ThemeProvider, createTheme, styled} from '@mui/material';
-import {DragHandle, AccountBox, Face, PhotoCamera, Logout, Map, ListAlt, ShareLocation} from '@mui/icons-material';
+import {DragHandle, AccountBox, Face, PhotoCamera, Logout, Map, ListAlt, ShareLocation, Home} from '@mui/icons-material';
 import axios from 'axios';
 import { withRouter, Link as RouterLink } from 'react-router-dom';
 
@@ -153,15 +153,43 @@ const Header = (props) => {
                 display: { xs: 'block', md: 'none' },
               }}
             >
-              <MenuItem><Map/>Zonificacion</MenuItem>
+              <MenuItem
+                to={{
+                  pathname: '/',
+                  state: { username: userin.username }
+                }}
+                component={React.forwardRef((props, ref) => <RouterLink innerRef={ref} {...props} />)}
+              ><Home/>Inicio</MenuItem>
+              <MenuItem
+                to={{
+                  pathname: '/zonification',
+                  state: { username: userin.username }
+                }}
+                component={React.forwardRef((props, ref) => <RouterLink innerRef={ref} {...props} />)} 
+              ><Map/>Zonificacion
+              </MenuItem>
               <MenuItem><ListAlt/>Reportes</MenuItem>
               <MenuItem><ShareLocation/>Ubicaciones</MenuItem>
             </Menu>
           </Box>
           
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
+              <Button
+                to={{
+                  pathname: '/',
+                  state: { username: userin.username }
+                }}
+                component={React.forwardRef((props, ref) => <RouterLink innerRef={ref} {...props} />)} 
+                onClick={handleCloseNavMenu}
+                sx={{ my: 2, color: 'white', display: 'block' }}
+              ><Home/>
+                Inicio
+              </Button>
               <Button 
-                to="/zonification" 
+                to={{
+                  pathname: '/zonification',
+                  state: { username: userin.username }
+              }} 
                 component={React.forwardRef((props, ref) => <RouterLink innerRef={ref} {...props} />)}
                 onClick={handleCloseNavMenu}
                 sx={{ my: 2, color: 'white', display: 'block' }}
