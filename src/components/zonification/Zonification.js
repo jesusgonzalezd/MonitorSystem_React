@@ -1,10 +1,8 @@
 import React, {useEffect, useState} from 'react';
 import Header from '../header/Header';
 import {Map, GoogleApiWrapper, Marker, InfoWindow, Polyline} from 'google-maps-react';
-//import useWatchLocation from "../location/useWatchLocation";
-//import { geolocationOptions } from "../../constants/geolocationOptions";
 
-const Home = (props) =>{
+const Zonification = (props) =>{
 
   const [location, setLocation] = useState({ lat: "", lng: "", });
   //const { location, error } = useWatchLocation(geolocationOptions);
@@ -63,13 +61,6 @@ const Home = (props) =>{
       });
   };
 
-  const triangleCoords = [
-    {lat: 25.774, lng: -80.190},
-    {lat: 21.166, lng: -66.118},
-    {lat: 32.321, lng: -64.757},
-    {lat: 25.774, lng: -80.190}
-  ];
-
 return(
   <div>
         <Header username={props.location.state.username}/>
@@ -108,4 +99,4 @@ return(
 
 export default GoogleApiWrapper({
   apiKey: "AIzaSyB3rjwTiwERUQZJ-eY3NqtpfabR04Jqt-E"
-})(Home)
+})(Zonification)

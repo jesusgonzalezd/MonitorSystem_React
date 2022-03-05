@@ -2,7 +2,7 @@ import React , {useState, useEffect} from 'react';
 import {AppBar, Box, Toolbar, IconButton, Typography, Container, Avatar, Button, Tooltip, Menu, MenuItem, Badge, ThemeProvider, createTheme, styled} from '@mui/material';
 import {DragHandle, AccountBox, Face, PhotoCamera, Logout, Map, ListAlt, ShareLocation} from '@mui/icons-material';
 import axios from 'axios';
-import { withRouter } from 'react-router-dom';
+import { withRouter, Link as RouterLink } from 'react-router-dom';
 
 const Header = (props) => {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
@@ -160,7 +160,9 @@ const Header = (props) => {
           </Box>
           
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-              <Button
+              <Button 
+                to="/zonification" 
+                component={React.forwardRef((props, ref) => <RouterLink innerRef={ref} {...props} />)}
                 onClick={handleCloseNavMenu}
                 sx={{ my: 2, color: 'white', display: 'block' }}
               ><Map/>
