@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import Header from '../header/Header';
 import {Map, GoogleApiWrapper, Marker, InfoWindow, Polyline} from 'google-maps-react';
+import {Button, Box} from '@mui/material';
 
 const Zonification = (props) =>{
 
@@ -12,7 +13,13 @@ const Zonification = (props) =>{
       showing: false
   });
 
+  const [lastlocation, setLastLocation] = useState({});
+
+  const [coords, setCoords] = useState([]);
+
   const [paths, setPaths] = useState([]);
+
+  const [onZone, setOnZone] = useState(false);
 
   useEffect(() => {
     if (navigator.geolocation) {
@@ -49,9 +56,14 @@ const Zonification = (props) =>{
 
     const pathObject = {lat: latitude, lng: longitude};
 
-    setPaths(paths => [...paths, pathObject]);
+    setLastLocation(pathObject);
 
-    console.log(paths);
+    setCoords(coords => [...coords, pathObject]);
+
+    console.log(coords);
+
+    if(coords.length == 0)
+      setOnZone(true);
 
     if (showInfoWindow.showing)
     setshowInfoWindow({
@@ -59,6 +71,23 @@ const Zonification = (props) =>{
         selectedPlace: '',
         showing: false
       });
+  };
+
+  const onSaveZone = () => {
+    
+    const initialCoords = coords[0];
+    setCoords(coords => [...coords, initialCoords]);
+
+    setPaths(paths => [...paths, coords]);
+
+    setOnZone(false);
+
+    console.log(coords);
+    console.log(paths);
+  };
+
+  const handleDeleteZone = (e) => {
+
   };
 
 return(
@@ -71,6 +100,22 @@ return(
              zoom={17}
              initialCenter = {{lat: 18.538119, lng: -69.944318}}
         >
+          {onZone? (
+                  <Box textAlign='center'>
+                          <Button 
+                              onClick={onSaveZone}
+                              variant='contained'
+                              color='success'>
+                                Guardar Zona
+                          </Button>
+                          <Button 
+                              onClick={handleDeleteZone}
+                              variant='contained'
+                              color='error'>
+                                Eliminar Zona
+                          </Button>
+                  </Box>
+              ) : null}
           <Marker
             name={"Latitud: " + location.lat + " Longitud: " + location.lng}
             onClick={onMarkerClick}
@@ -87,12 +132,24 @@ return(
             </div>
           </InfoWindow>
 
-          <Polyline
-              path={paths}
-              strokeColor="#0000FF"
-              strokeOpacity={0.8}
-              strokeWeight={2}
-          />
+            <Polyline
+                path={coords}
+                strokeColor="#1E1E1E"
+                strokeOpacity={0.8}
+                strokeWeight={5}
+            />
+
+          { paths && paths.map((item, index) => {
+            return(            
+                    <Polyline key={index}
+                          path={item}
+                          strokeColor="#1E1E1E"
+                          strokeOpacity={0.8}
+                          strokeWeight={5}
+                    />
+           ); // Termina el return, mostrando cada una de las tarjetas de productos.
+          })
+        }
       </Map>
   </div>
 )}

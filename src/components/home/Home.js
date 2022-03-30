@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import Header from '../header/Header';
-import {Map, GoogleApiWrapper, Marker, InfoWindow, Polyline} from 'google-maps-react';
+import {Map, GoogleApiWrapper, Marker, InfoWindow} from 'google-maps-react';
 //import useWatchLocation from "../location/useWatchLocation";
 //import { geolocationOptions } from "../../constants/geolocationOptions";
 
@@ -13,8 +13,6 @@ const Home = (props) =>{
       selectedPlace: {},
       showing: false
   });
-
-  const [paths, setPaths] = useState([]);
 
   useEffect(() => {
     if (navigator.geolocation) {
@@ -49,12 +47,6 @@ const Home = (props) =>{
     const longitude = latLng.lng();
     console.log("Latitud: " + latitude + " Longitud: " + longitude);
 
-    const pathObject = {lat: latitude, lng: longitude};
-
-    setPaths(paths => [...paths, pathObject]);
-
-    console.log(paths);
-
     if (showInfoWindow.showing)
     setshowInfoWindow({
         activeMarker: null,
@@ -62,13 +54,6 @@ const Home = (props) =>{
         showing: false
       });
   };
-
-  const triangleCoords = [
-    {lat: 25.774, lng: -80.190},
-    {lat: 21.166, lng: -66.118},
-    {lat: 32.321, lng: -64.757},
-    {lat: 25.774, lng: -80.190}
-  ];
 
 return(
   <div>
@@ -95,13 +80,6 @@ return(
               <h4>{showInfoWindow.selectedPlace.name}</h4>
             </div>
           </InfoWindow>
-
-          <Polyline
-              path={paths}
-              strokeColor="#0000FF"
-              strokeOpacity={0.8}
-              strokeWeight={2}
-          />
       </Map>
   </div>
 )}
