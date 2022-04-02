@@ -6,6 +6,9 @@ import {Map, GoogleApiWrapper, Marker, InfoWindow} from 'google-maps-react';
 
 const Home = (props) =>{
 
+  //Hook para conocer si un usuario esta logueado o no.
+  const[userin, setUserin] = useState(false);
+
   const [location, setLocation] = useState({ lat: "", lng: "", });
   //const { location, error } = useWatchLocation(geolocationOptions);
   const [showInfoWindow, setshowInfoWindow] = useState({
@@ -15,6 +18,10 @@ const Home = (props) =>{
   });
 
   useEffect(() => {
+
+    if(props.postObject.username === undefined)
+       setUserin(false);
+
     if (navigator.geolocation) {
         navigator.geolocation.watchPosition(function(position) {
         setLocation({
@@ -23,7 +30,7 @@ const Home = (props) =>{
         });
       });
     }
-  }, []);
+  }, [props.postObject.username]);
 
   const onMarkerClick = (props, marker) =>
     setshowInfoWindow({
@@ -57,30 +64,35 @@ const Home = (props) =>{
 
 return(
   <div>
-        <Header username={props.location.state.username}/>
-        <Map className="map"
-             google={props.google}
-             onClick={onMapClicked}
-             style={{ height: "100%", width: "100%" }}
-             zoom={7}
-             initialCenter = {{lat: 18.762391, lng: -69.439192}}
-        >
-          <Marker
-            name={"Latitud: " + location.lat + " Longitud: " + location.lng}
-            onClick={onMarkerClick}
-            position={{ lat: location.lat, lng: location.lng }}
-          />
+    {userin? 
+        <div>
+              <Header username={props.location.state.username}/>
+              <Map className="map"
+                  google={props.google}
+                  onClick={onMapClicked}
+                  style={{ height: "100%", width: "100%" }}
+                  zoom={7}
+                  initialCenter = {{lat: 18.762391, lng: -69.439192}}
+              >
+                <Marker
+                  name={"Latitud: " + location.lat + " Longitud: " + location.lng}
+                  onClick={onMarkerClick}
+                  position={{ lat: location.lat, lng: location.lng }}
+                />
 
-          <InfoWindow
-            marker={showInfoWindow.activeMarker}
-            onClose={onInfoWindowClose}
-            visible={showInfoWindow.showing}
-          >
-            <div>
-              <h4>{showInfoWindow.selectedPlace.name}</h4>
-            </div>
-          </InfoWindow>
-      </Map>
+                <InfoWindow
+                  marker={showInfoWindow.activeMarker}
+                  onClose={onInfoWindowClose}
+                  visible={showInfoWindow.showing}
+                >
+                  <div>
+                    <h4>{showInfoWindow.selectedPlace.name}</h4>
+                  </div>
+                </InfoWindow>
+            </Map>
+        </div>
+        :  <div/> 
+    }
   </div>
 )}
 

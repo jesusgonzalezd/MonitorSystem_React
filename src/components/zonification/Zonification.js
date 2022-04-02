@@ -81,13 +81,6 @@ const Zonification = (props) =>{
     setPaths(paths => [...paths, coords]);
 
     setOnZone(false);
-
-    console.log(coords);
-    console.log(paths);
-  };
-
-  const handleDeleteZone = (e) => {
-
   };
 
 return(
@@ -107,12 +100,6 @@ return(
                               variant='contained'
                               color='success'>
                                 Guardar Zona
-                          </Button>
-                          <Button 
-                              onClick={handleDeleteZone}
-                              variant='contained'
-                              color='error'>
-                                Eliminar Zona
                           </Button>
                   </Box>
               ) : null}

@@ -4,6 +4,7 @@ import Login from '../components/login/Login';
 import Signup from '../components/signup/Signup';
 import Home from '../components/home/Home';
 import Zonification from '../components/zonification/Zonification';
+import Company from '../components/company/Company';
 //import MapView from '../components/mapview/MapView';
 
 // Componente Funcional Routes.
@@ -12,6 +13,7 @@ const Routes = () =>(
       <Route exact path = "/signup" component={Signup}/>
       <Route exact path = "/login" component={Login}/>
       <Route exact path = "/zonification" component={Zonification}/>
+      <Route exact path = "/company" component={Company}/>
       <Route exact path = "/" component={Home}/>
     </Switch>
 );
