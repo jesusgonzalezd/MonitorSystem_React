@@ -29,12 +29,14 @@ const Signup = (props) => {
     UserName: '',
     Department: '',
     Email: '',
-    Password: ''
+    Password: '',
+    Company: '',
   });
 
   // Hook para almacenar la direccion de correo del usuario.
   const [direction, setDirection] = useState(null);
   const [department, setDepartment] = useState(null);
+  const [company, setCompany] = useState(null);
 
   // Hook para mostrar el progress o boton de registrar.
   const [showProgress, setshowProgress] = useState(false);
@@ -49,6 +51,9 @@ const Signup = (props) => {
       appear: false,
   });
 
+  // Empresas registradas
+  const[companies, setCompanies] = useState([]);
+
   const peticionPost = async() => {
    
     var bodyFormData = new FormData();
@@ -60,6 +65,7 @@ const Signup = (props) => {
     bodyFormData.append('Avatar', avatarC.image);
     bodyFormData.append('Email', user.Email + direction);
     bodyFormData.append('Password', user.Password);
+    bodyFormData.append('IdCompany', user.Company + company);
 
     axios({
       method: "post",
@@ -77,8 +83,31 @@ const Signup = (props) => {
   }
 
   useEffect(() => {
+
       setDirection("@gmail.com");
       setDepartment("Audiovisual");
+
+      axios.get('https://localhost:44322/api/company/getallcompanies')
+        .then(function (response) {
+
+          let companiesArray = [];
+
+          response.data.forEach(element => {
+            
+              var newCompany = {
+                IdCompany: element.idCompany,
+                Name: element.name,
+                Area: element.area,
+                Email: element.email,
+              }
+
+              companiesArray.push(newCompany);
+        })
+        setCompanies(companiesArray);
+      })
+        .catch(function (response){
+          console.log(response.error);
+        })
   }, []);
 
   // Evento HandleChange para modificar y asignar los datos al Hook.
@@ -181,6 +210,11 @@ const handleModifiedDepartment = (event) => {
   setDepartment(event.target.value);
 };
 
+const handleModifiedCompany = (event) => {
+  console.log(event.target.value);
+  setCompany(event.target.value);
+};
+
   return (
     <ThemeProvider theme={darkTheme}>
       <Grid container component="main" sx={{ height: '100vh' }}>
@@ -270,6 +304,27 @@ const handleModifiedDepartment = (event) => {
                      <MenuItem value={"Contabilidad"}>Contabilidad</MenuItem>
                      <MenuItem value={"Ventas"}>Ventas</MenuItem>
                      <MenuItem value={"Compras"}>Compras</MenuItem>
+                </Select>
+                </FormControl>
+            </Grid>
+            <Grid item xs={12}>
+                <FormControl variant="outlined" fullWidth>
+                <InputLabel ref={inputLabel} id="demo-simple-select-outlined-label">
+                </InputLabel>
+                <Select
+                     labelId="demo-simple-select-outlined-label"
+                     id="demo-simple-select-outlined"
+                     required
+                     onChange={handleModifiedCompany}
+                     defaultValue={""}
+                     name="companies"
+                >
+                  {companies && companies.map((item, index) => {
+                    return(
+                            <MenuItem key={index} value={item.IdCompany}>{item.Name}</MenuItem>
+                     );
+                    })
+                  }
                 </Select>
                 </FormControl>
             </Grid>

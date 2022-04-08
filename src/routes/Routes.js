@@ -5,7 +5,6 @@ import Signup from '../components/signup/Signup';
 import Home from '../components/home/Home';
 import Zonification from '../components/zonification/Zonification';
 import Company from '../components/company/Company';
-//import MapView from '../components/mapview/MapView';
 
 // Componente Funcional Routes.
 const Routes = () =>(
