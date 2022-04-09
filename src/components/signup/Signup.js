@@ -1,5 +1,5 @@
 import React, {useState, useEffect, useRef} from 'react';
-import {Avatar, Button, TextField, FormControlLabel, Checkbox, Link, Paper, Box, Grid, Typography, CssBaseline, createTheme, ThemeProvider, CircularProgress, FormLabel, FormControl, InputLabel, Select, MenuItem} from '@mui/material';
+import {Avatar, Button, TextField, FormControlLabel, Checkbox, Link, Paper, Box, Grid, Typography, CssBaseline, createTheme, ThemeProvider, CircularProgress, FormControl, InputLabel, Select, MenuItem} from '@mui/material';
 import { Link as RouterLink, withRouter} from 'react-router-dom';
 import AvatarEdit from 'react-avatar-edit';
 import axios from 'axios';
@@ -83,9 +83,6 @@ const Signup = (props) => {
   }
 
   useEffect(() => {
-
-      setDirection("@gmail.com");
-      setDepartment("Audiovisual");
 
       axios.get('https://localhost:44322/api/company/getallcompanies')
         .then(function (response) {
@@ -289,14 +286,14 @@ const handleModifiedCompany = (event) => {
               </Grid>
               <Grid item xs={12} sm={6}>
                 <FormControl variant="outlined" fullWidth>
-                <InputLabel ref={inputLabel} id="demo-simple-select-outlined-label">
-                </InputLabel>
+                <InputLabel ref={inputLabel} id="demo-simple-select-outlined-label">Seleccione un Departamento</InputLabel>
                 <Select
                      labelId="demo-simple-select-outlined-label"
                      id="demo-simple-select-outlined"
                      required
+                     autoWidth
                      onChange={handleModifiedDepartment}
-                     defaultValue={"Audiovisual"}
+                     defaultValue={""}
                      name="direction"
                 >
                      <MenuItem value={"Audiovisual"}>Audiovisual</MenuItem>
@@ -309,12 +306,12 @@ const handleModifiedCompany = (event) => {
             </Grid>
             <Grid item xs={12}>
                 <FormControl variant="outlined" fullWidth>
-                <InputLabel ref={inputLabel} id="demo-simple-select-outlined-label">
-                </InputLabel>
+                <InputLabel ref={inputLabel} id="demo-simple-select-outlined-label">Selecciona una Empresa</InputLabel>
                 <Select
                      labelId="demo-simple-select-outlined-label"
                      id="demo-simple-select-outlined"
                      required
+                     autoWidth
                      onChange={handleModifiedCompany}
                      defaultValue={""}
                      name="companies"
@@ -328,15 +325,18 @@ const handleModifiedCompany = (event) => {
                 </Select>
                 </FormControl>
             </Grid>
-              <Grid container justify="center" alignItems="center">
-                <FormLabel>Selecciona un avatar</FormLabel>
-                      <AvatarEdit
-                          width={150}
-                          height={140}
+        
+              <Grid container spacing={0} direction="column" alignItems="center" justifyContent="center" style={{ minHeight: '25vh' }}>
+                  <InputLabel ref={inputLabel} id="demo-simple-select-outlined-label">Selecciona una Foto</InputLabel>
+                  <AvatarEdit
+                          width={200}
+                          height={200}
                           onCrop={onCrop}
                           onClose={onClose}
                           onBeforeFileLoad={onBeforeFileLoad}
-                      />
+                          autoFocus
+                          autoWidth
+                  />
             </Grid>
               <Grid item xs={12} sm={6}>
                 <TextField
@@ -353,14 +353,14 @@ const handleModifiedCompany = (event) => {
               </Grid>
               <Grid item xs={12} sm={6}>
                 <FormControl variant="outlined" fullWidth>
-                <InputLabel ref={inputLabel} id="demo-simple-select-outlined-label">
-                </InputLabel>
+                <InputLabel ref={inputLabel} id="demo-simple-select-outlined-label">Selecciona una Direccion</InputLabel>
                 <Select
                      labelId="demo-simple-select-outlined-label"
                      id="demo-simple-select-outlined"
                      required
+                     autoWidth
                      onChange={handleModifiedDirection}
-                     defaultValue={"@gmail.com"}
+                     defaultValue={""}
                      name="direction"
                 >
                      <MenuItem value={"@gmail.com"}>@gmail.com</MenuItem>
