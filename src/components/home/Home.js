@@ -1,16 +1,11 @@
 import React, {useEffect, useState} from 'react';
 import Header from '../header/Header';
 import {Map, GoogleApiWrapper, Marker, InfoWindow} from 'google-maps-react';
-//import useWatchLocation from "../location/useWatchLocation";
-//import { geolocationOptions } from "../../constants/geolocationOptions";
 
 const Home = (props) =>{
 
-  //Hook para conocer si un usuario esta logueado o no.
-  const[userin, setUserin] = useState(false);
-
   const [location, setLocation] = useState({ lat: "", lng: "", });
-  //const { location, error } = useWatchLocation(geolocationOptions);
+
   const [showInfoWindow, setshowInfoWindow] = useState({
       activeMarker: {},
       selectedPlace: {},
@@ -18,9 +13,6 @@ const Home = (props) =>{
   });
 
   useEffect(() => {
-
-    if(props.postObject.username === undefined)
-       setUserin(false);
 
     if (navigator.geolocation) {
         navigator.geolocation.watchPosition(function(position) {
@@ -30,7 +22,7 @@ const Home = (props) =>{
         });
       });
     }
-  }, [props.postObject.username]);
+  }, []);
 
   const onMarkerClick = (props, marker) =>
     setshowInfoWindow({
@@ -63,8 +55,6 @@ const Home = (props) =>{
   };
 
 return(
-  <div>
-    {userin? 
         <div>
               <Header username={props.location.state.username}/>
               <Map className="map"
@@ -91,9 +81,6 @@ return(
                 </InfoWindow>
             </Map>
         </div>
-        :  <div/> 
-    }
-  </div>
 )}
 
 export default GoogleApiWrapper({
