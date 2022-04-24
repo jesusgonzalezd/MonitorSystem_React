@@ -1,25 +1,20 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useRef, useCallback} from 'react';
 import Header from '../header/Header';
-import {Map, GoogleApiWrapper, Marker, InfoWindow, Polyline} from 'google-maps-react';
-import {Button, Box} from '@mui/material';
+import {GoogleMap, Polygon, useJsApiLoader, Marker} from "@react-google-maps/api";
 
 const Zonification = (props) =>{
 
   const [location, setLocation] = useState({ lat: "", lng: "", });
-  //const { location, error } = useWatchLocation(geolocationOptions);
-  const [showInfoWindow, setshowInfoWindow] = useState({
-      activeMarker: {},
-      selectedPlace: {},
-      showing: false
-  });
 
-  const [lastlocation, setLastLocation] = useState({});
-
-  const [coords, setCoords] = useState([]);
-
-  const [paths, setPaths] = useState([]);
-
-  const [onZone, setOnZone] = useState(false);
+  const mapContainerStyle = {
+    width: '2000px',
+    height: '1000px',
+  };
+  
+  const center = {
+    lat: 18.538119,
+    lng: -69.944318
+  };
 
   useEffect(() => {
     if (navigator.geolocation) {
@@ -32,115 +27,93 @@ const Zonification = (props) =>{
     }
   }, []);
 
-  const onMarkerClick = (props, marker) =>
-    setshowInfoWindow({
-      activeMarker: marker,
-      selectedPlace: props,
-      showing: true
-    });
+  // Code Stack
+  const [path, setPath] = useState([
+    {lat: 18.528119, lng: -69.394318},
+    {lat: 18.488119, lng: -69.364318},
+    {lat: 18.488119, lng: -69.444318},
+  ]);
 
-  const onInfoWindowClose = () =>
-    setshowInfoWindow({
-      activeMarker: null,
-      selectedPlace: '',
-      showing: false
-    });
+  // Define refs for Polygon instance and listeners
+  const polygonRef = useRef(null);
+  const listenersRef = useRef([]);
 
-  const onMapClicked = (t, map, coord) => {
+  // Call setPath with new edited path
+  const onEdit = useCallback(() => {
+    if (polygonRef.current) {
+      const nextPath = polygonRef.current
+        .getPath()
+        .getArray()
+        .map(latLng => {
+          return { lat: latLng.lat(), lng: latLng.lng() };
+        });
+      setPath(nextPath);
+    }
+  }, [setPath]);
 
-    // Obtener coordenadas con un click al mapa.
-    const { latLng } = coord;
-    const latitude = latLng.lat();
-    const longitude = latLng.lng();
-    console.log("Latitud: " + latitude + " Longitud: " + longitude);
+  // Bind refs to current Polygon and listeners
+  const onLoad = useCallback(
+    polygon => {
+      polygonRef.current = polygon;
+      const path = polygon.getPath();
+      listenersRef.current.push(
+        path.addListener("set_at", onEdit),
+        path.addListener("insert_at", onEdit),
+        path.addListener("remove_at", onEdit)
+      );
+    },
+    [onEdit]
+  );
 
-    const pathObject = {lat: latitude, lng: longitude};
+  const { isLoaded } = useJsApiLoader({
+    id: 'google-map-script',
+    googleMapsApiKey: "AIzaSyB3rjwTiwERUQZJ-eY3NqtpfabR04Jqt-E"
+  })
 
-    setLastLocation(pathObject);
+  const [, setMap] = React.useState(null)
 
-    setCoords(coords => [...coords, pathObject]);
+  // Clean up refs
+  const onUnmount = useCallback(() => {
+    listenersRef.current.forEach(lis => lis.remove());
+    polygonRef.current = null;
+  }, []);
 
-    console.log(coords);
+  console.log("The path state is", path);
 
-    if(coords.length == 0)
-      setOnZone(true);
+  const onLoad_ = React.useCallback(function callback(map) {
+    const bounds = new window.google.maps.LatLngBounds();
+    map.fitBounds(bounds);
+    setMap(map)
+  }, [])
 
-    if (showInfoWindow.showing)
-    setshowInfoWindow({
-        activeMarker: null,
-        selectedPlace: '',
-        showing: false
-      });
-  };
-
-  const onSaveZone = () => {
-    
-    const initialCoords = coords[0];
-    setCoords(coords => [...coords, initialCoords]);
-
-    setPaths(paths => [...paths, coords]);
-
-    setOnZone(false);
-  };
-
-return(
+return isLoaded ?(
+  
   <div>
-        <Header username={props.location.state.username}/>
-        <Map className="map"
-             google={props.google}
-             onClick={onMapClicked}
-             style={{ height: "100%", width: "100%" }}
-             zoom={17}
-             initialCenter = {{lat: 18.538119, lng: -69.944318}}
-        >
-          {onZone? (
-                  <Box textAlign='center'>
-                          <Button 
-                              onClick={onSaveZone}
-                              variant='contained'
-                              color='success'>
-                                Guardar Zona
-                          </Button>
-                  </Box>
-              ) : null}
-          <Marker
-            name={"Latitud: " + location.lat + " Longitud: " + location.lng}
-            onClick={onMarkerClick}
+      <Header username={props.location.state.username}/>
+      <GoogleMap
+        mapContainerStyle={mapContainerStyle}
+        center={center}
+        onLoad={onLoad_}
+        onUnmount={onUnmount}
+        zoom={13}
+      >
+
+        <Marker
             position={{ lat: location.lat, lng: location.lng }}
-          />
+        />
 
-          <InfoWindow
-            marker={showInfoWindow.activeMarker}
-            onClose={onInfoWindowClose}
-            visible={showInfoWindow.showing}
-          >
-            <div>
-              <h4>{showInfoWindow.selectedPlace.name}</h4>
-            </div>
-          </InfoWindow>
+        <Polygon
+            editable
+            draggable
+            path={path}
+            onMouseUp={onEdit}
+            onDragEnd={onEdit}
+            onLoad={onLoad}
+            onUnmount={onUnmount}
+        />
+        </GoogleMap>
+    </div>
+) : <></>
+}
 
-            <Polyline
-                path={coords}
-                strokeColor="#1E1E1E"
-                strokeOpacity={0.8}
-                strokeWeight={5}
-            />
-
-          { paths && paths.map((item, index) => {
-            return(            
-                    <Polyline key={index}
-                          path={item}
-                          strokeColor="#1E1E1E"
-                          strokeOpacity={0.8}
-                          strokeWeight={5}
-                    />
-           ); // Termina el return, mostrando cada una de las tarjetas de productos.
-          })
-        }
-      </Map>
-  </div>
-)}
-
-export default GoogleApiWrapper({
-  apiKey: "AIzaSyB3rjwTiwERUQZJ-eY3NqtpfabR04Jqt-E"
-})(Zonification)
+export default React.memo(Zonification);

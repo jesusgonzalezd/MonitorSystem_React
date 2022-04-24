@@ -33,7 +33,7 @@ const Company = (props) => {
    const inputLabel = useRef(null);
 
   // Contenido del Snackbar.
-  const[snack, setsnack] = useState({
+  const[snack, ] = useState({
       motive: '',
       text: '',
       appear: false,

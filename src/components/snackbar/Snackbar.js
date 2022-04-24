@@ -7,7 +7,7 @@ const Alert = React.forwardRef(function Alert(props, ref) {
 });
 
 const CustomizedSnackbars = (props) => {
-  const [open, setOpen] = React.useState(true);
+  const [, setOpen] = React.useState(true);
 
   const handleClose = (event, reason) => {
     if (reason === 'clickaway') {
