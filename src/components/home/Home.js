@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import Header from '../header/Header';
 import {Map, GoogleApiWrapper, Marker, InfoWindow} from 'google-maps-react';
+import {Redirect} from 'react-router-dom';
 
 const Home = (props) =>{
 
@@ -56,6 +57,8 @@ const Home = (props) =>{
 
 return(
         <div>
+           {props.location.state !== undefined?
+             <div>
               <Header username={props.location.state.username}/>
               <Map className="map"
                   google={props.google}
@@ -80,6 +83,11 @@ return(
                   </div>
                 </InfoWindow>
             </Map>
+            </div> :
+            <div>
+              <Redirect to="/login"/>
+            </div>
+          }
         </div>
 )}
 
