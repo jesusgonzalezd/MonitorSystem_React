@@ -27,6 +27,8 @@ const Zonification = (props) =>{
     width: '2000px',
     height: '1000px',
   };
+
+  const [position, setPosition] = useState();
   
   useEffect(() => {
     if (navigator.geolocation) {
@@ -35,6 +37,11 @@ const Zonification = (props) =>{
           lat: position.coords.latitude,
           lng: position.coords.longitude,
         });
+
+        setPosition({
+          lat: 18.762391, 
+          lng: -69.439192
+      });
       });
     }
   }, []);
@@ -104,16 +111,27 @@ const Zonification = (props) =>{
 
   const handleAddNewZone = (coord) => {
     const { latLng } = coord;
+
+    const latitude = latLng.lat();
+    const longitude = latLng.lng();
+
+    setPosition({
+      lat: latitude,
+      lng: longitude
+    });
+
     setPath([
       {lat: latLng.lat(), lng: latLng.lng()},
       {lat: latLng.lat()+0.001, lng: latLng.lng()-0.001},
       {lat: latLng.lat()+0.001, lng: latLng.lng()+0.001}
     ])
+
     setActive(true);
   }
 
   console.log(zones);
 
+// Cambio de contenido del Textfield del Nombre de la Zona.
  const handleChange = (e) => {
   setNamezone({
     ...namezone,
@@ -121,13 +139,16 @@ const Zonification = (props) =>{
   });
 };
 
-const onMapClicked = (coord) => {
-  // Obtener coordenadas con un click al mapa.
-  const { latLng } = coord;
-  const latitude = latLng.lat();
-  const longitude = latLng.lng();
-  console.log("Latitud: " + latitude + " Longitud: " + longitude);
-};
+// Referencia del Mapa para obtener sus atributos.
+const mapRef = useRef(null);
+
+//Funcion para fijar el mapa en la ubicacion de la creacion de la nueva zona laboral.
+const handleCenter = () => {
+  if (!mapRef.current) return;
+
+  const newPos = mapRef.current.getCenter().toJSON();
+  setPosition(newPos);
+}
 
 return isLoaded ?(
 
@@ -138,8 +159,9 @@ return isLoaded ?(
         onLoad={onLoad_}
         onUnmount={onUnmount}
         zoom={7}
-        center = {{lat: location.lat, lng: location.lng}}
+        center = {position}
         onClick={handleAddNewZone}
+        onDragEnd={handleCenter}
       >
         <Grid container spacing={0} direction="column-reverse" alignItems="center" justifyContent="center">
           <Button variant="contained" onClick={handleClickOpen}>
@@ -176,7 +198,7 @@ return isLoaded ?(
           </Dialog>
 
         <Marker
-            position={{ lat: location.lat, lng: location.lng }}
+            position={location}
         />
 
         {active?
