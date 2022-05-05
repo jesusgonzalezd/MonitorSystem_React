@@ -23,6 +23,10 @@ const Home = (props) =>{
         });
       });
     }
+    // Manejo de perdida de memoria - Funcion de limpieza
+    return () => {
+      setLocation({});
+    };
   }, []);
 
   const onMarkerClick = (props, marker) =>

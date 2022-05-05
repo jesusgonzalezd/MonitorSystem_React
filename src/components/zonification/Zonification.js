@@ -39,8 +39,8 @@ const Zonification = (props) =>{
         });
 
         setPosition({
-          lat: 18.762391, 
-          lng: -69.439192
+          lat: 18.7623, 
+          lng: -69.4391
       });
       });
     }
