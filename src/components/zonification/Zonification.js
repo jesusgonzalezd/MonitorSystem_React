@@ -44,6 +44,12 @@ const Zonification = (props) =>{
       });
       });
     }
+
+    // Manejo de perdida de memoria - Funcion de limpieza
+    return () => {
+      setLocation({});
+      setPosition({});
+    };
   }, []);
 
   // Code Stack
