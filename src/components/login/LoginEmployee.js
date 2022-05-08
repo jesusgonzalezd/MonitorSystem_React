@@ -3,7 +3,7 @@ import axios from 'axios';
 import {Avatar, Button, TextField, FormControlLabel, Checkbox, Link, Paper, Box, Grid, Typography, CssBaseline, createTheme, ThemeProvider} from '@mui/material';
 import { Link as RouterLink, withRouter, Redirect} from 'react-router-dom';
 
-const Login = (props) => {
+const LoginEmployee = (props) => {
 
 const darkTheme = createTheme({
   palette: {
@@ -202,4 +202,4 @@ function Copyright() {
   );
 }
 
-export default withRouter(Login);
+export default withRouter(LoginEmployee);

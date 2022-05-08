@@ -31,12 +31,14 @@ const Signup = (props) => {
     Email: '',
     Password: '',
     Company: '',
+    Role: '',
   });
 
   // Hook para almacenar la direccion de correo del usuario.
   const [direction, setDirection] = useState(null);
   const [department, setDepartment] = useState(null);
   const [company, setCompany] = useState(null);
+  const[role, setRole] = useState(null);
 
   // Hook para mostrar el progress o boton de registrar.
   const [showProgress, setshowProgress] = useState(false);
@@ -54,6 +56,9 @@ const Signup = (props) => {
   // Empresas registradas
   const[companies, setCompanies] = useState([]);
 
+  // Roles registrados
+  const[roles, setRoles] = useState([]);
+
   const peticionPost = async() => {
    
     var bodyFormData = new FormData();
@@ -66,6 +71,7 @@ const Signup = (props) => {
     bodyFormData.append('Email', user.Email + direction);
     bodyFormData.append('Password', user.Password);
     bodyFormData.append('IdCompany', user.Company + company);
+    bodyFormData.append('IdRole', user.Role + role);
 
     axios({
       method: "post",
@@ -75,7 +81,7 @@ const Signup = (props) => {
     })
       .then(function (response) {
         console.log(response);
-        props.history.push('/login');
+        props.history.push('/loginemployee');
       })
       .catch(function (response) {
         console.log(response);
@@ -84,13 +90,12 @@ const Signup = (props) => {
 
   useEffect(() => {
 
+      // Obteniendo todas las empresas registradas.
       axios.get('https://localhost:44322/api/company/getallcompanies')
         .then(function (response) {
-
           let companiesArray = [];
 
           response.data.forEach(element => {
-            
               var newCompany = {
                 IdCompany: element.idCompany,
                 Name: element.name,
@@ -101,6 +106,26 @@ const Signup = (props) => {
               companiesArray.push(newCompany);
         })
         setCompanies(companiesArray);
+      })
+        .catch(function (response){
+          console.log(response.error);
+        })
+
+
+      // Obteniendo los roles registrados.
+      axios.get('https://localhost:44322/api/administration/getroles')
+        .then(function (response) {
+          let rolesArray = [];
+        
+          response.data.rolesList.forEach(element => {
+              var newRole = {
+                Id: element.id,
+                Name: element.name,
+              }
+
+              rolesArray.push(newRole);
+        })
+        setRoles(rolesArray);
       })
         .catch(function (response){
           console.log(response.error);
@@ -212,6 +237,11 @@ const handleModifiedCompany = (event) => {
   setCompany(event.target.value);
 };
 
+const handleModifiedRoles = (event) => {
+  console.log(event.target.value);
+  setRole(event.target.value);
+};
+
   return (
     <ThemeProvider theme={darkTheme}>
       <Grid container component="main" sx={{ height: '100vh' }}>
@@ -319,6 +349,27 @@ const handleModifiedCompany = (event) => {
                   {companies && companies.map((item, index) => {
                     return(
                             <MenuItem key={index} value={item.IdCompany}>{item.Name}</MenuItem>
+                     );
+                    })
+                  }
+                </Select>
+                </FormControl>
+            </Grid>
+            <Grid item xs={12}>
+                <FormControl variant="outlined" fullWidth>
+                <InputLabel ref={inputLabel} id="demo-simple-select-outlined-label">Selecciona un Rol</InputLabel>
+                <Select
+                     labelId="demo-simple-select-outlined-label"
+                     id="demo-simple-select-outlined"
+                     required
+                     autoWidth
+                     onChange={handleModifiedRoles}
+                     defaultValue={""}
+                     name="roles"
+                >
+                  {roles && roles.map((item, index) => {
+                    return(
+                            <MenuItem key={index} value={item.Id}>{item.Name}</MenuItem>
                      );
                     })
                   }

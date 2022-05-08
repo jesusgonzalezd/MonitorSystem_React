@@ -102,7 +102,7 @@ const Header = (props) => {
     })
       .then(function (response) {
         console.log(response);
-        props.history.push('/login');
+        props.history.push('/loginemployee');
       })
       .catch(function (response) {
         console.log(response);
