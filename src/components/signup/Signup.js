@@ -461,7 +461,7 @@ const handleModifiedRoles = (event) => {
             }
             <Grid container justifyContent="flex-end">
               <Grid item>
-              <Link to="/login" component={React.forwardRef((props, ref) => <RouterLink innerRef={ref} {...props} />)} variant="body2">
+              <Link to="/" component={React.forwardRef((props, ref) => <RouterLink innerRef={ref} {...props} />)} variant="body2">
                   Tienes una cuenta? Inicia sesion.
                 </Link>
               </Grid>

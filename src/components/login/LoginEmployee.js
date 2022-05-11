@@ -97,7 +97,7 @@ const handleSubmit = (event) => {
           sm={4}
           md={7}
           sx={{
-            backgroundImage: 'url(https://birtual.es/images/logotipo.gif)', 
+            backgroundImage: 'url(https://i.pinimg.com/originals/87/78/33/877833b548a0eb2d48ed03028f9bef77.gif)', 
             backgroundRepeat: 'no-repeat',
             backgroundColor: (t) =>
               t.palette.mode === 'light' ? t.palette.grey[50] : t.palette.grey[900],
@@ -116,7 +116,7 @@ const handleSubmit = (event) => {
             }}
           >
 
-            <Avatar sx={{ m: 1, width: 106, height: 106 }} src="https://i.pinimg.com/originals/d7/ae/01/d7ae0170d3d5ffcbaa7f02fdda387a3b.gif" />
+            <Avatar sx={{ m: 1, width: 106, height: 106 }} src="https://static.vecteezy.com/system/resources/previews/004/181/466/large_2x/improve-time-management-rgb-color-icon-professional-skills-for-employee-to-increase-productivity-self-improvement-for-higher-efficiency-isolated-illustration-simple-filled-line-drawing-vector.jpg" />
 
             <Typography component="h1" variant="h5">
               Login de Empleado
@@ -155,6 +155,14 @@ const handleSubmit = (event) => {
                 sx={{ mt: 3, mb: 2 }}
               >
                 Acceder
+              </Button>
+              <Button
+                to="/" component={React.forwardRef((props, ref) => <RouterLink innerRef={ref} {...props} />)} variant="contained"
+                type="submit"
+                fullWidth
+                sx={{ mt: 3, mb: 2 }}
+              >
+                Atras
               </Button>
 
               <div>

@@ -3,7 +3,7 @@ import axios from 'axios';
 import {Avatar, Button, TextField, FormControlLabel, Checkbox, Link, Paper, Box, Grid, Typography, CssBaseline, createTheme, ThemeProvider} from '@mui/material';
 import { Link as RouterLink, withRouter, Redirect} from 'react-router-dom';
 
-const LoginMonitor = (props) => {
+const LoginSupervisor = (props) => {
 
 const darkTheme = createTheme({
   palette: {
@@ -77,7 +77,7 @@ const handleSubmit = (event) => {
           sm={4}
           md={7}
           sx={{
-            backgroundImage: 'url(https://i.imgur.com/NP7iDOL.gif?noredirect)', 
+            backgroundImage: 'url(https://i.pinimg.com/originals/e7/78/2b/e7782b954b20ab768c74fc1dfd6f9377.gif)', 
             backgroundRepeat: 'no-repeat',
             backgroundColor: (t) =>
               t.palette.mode === 'light' ? t.palette.grey[50] : t.palette.grey[900],
@@ -96,10 +96,10 @@ const handleSubmit = (event) => {
             }}
           >
 
-            <Avatar sx={{ m: 1, width: 106, height: 106 }} src="https://i.pinimg.com/originals/d7/ae/01/d7ae0170d3d5ffcbaa7f02fdda387a3b.gif" />
+            <Avatar sx={{ m: 1, width: 106, height: 106 }} src="https://www.webspresenciales.es/imagenes/apartados/precios-paginas-web/precios-paginas-web-totalmente-terminadas.gif" />
 
             <Typography component="h1" variant="h5">
-              Login de Monitor
+              Login de Supervisor
             </Typography>
             <Box component="form" onSubmit={handleSubmit} sx={{ mt: 1 }}>
               <TextField
@@ -191,4 +191,4 @@ function Copyright() {
   );
 }
 
-export default withRouter(LoginMonitor);
+export default withRouter(LoginSupervisor);
