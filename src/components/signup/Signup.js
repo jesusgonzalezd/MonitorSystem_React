@@ -81,7 +81,7 @@ const Signup = (props) => {
     })
       .then(function (response) {
         console.log(response);
-        props.history.push('/loginemployee');
+        props.history.push('/');
       })
       .catch(function (response) {
         console.log(response);

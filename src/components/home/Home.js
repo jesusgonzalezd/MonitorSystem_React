@@ -89,7 +89,7 @@ return(
             </Map>
             </div> :
             <div>
-              <Redirect to="/loginemployee"/>
+              <Redirect to="/"/>
             </div>
           }
         </div>

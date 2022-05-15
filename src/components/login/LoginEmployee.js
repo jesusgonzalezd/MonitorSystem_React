@@ -20,7 +20,8 @@ const [login, setLogin] = useState(false);
 // Hook para almacenar las credenciales del usuario.
 const [user, setUser] = useState({
   username: '',
-  password: ''
+  password: '',
+  role: 'Employee'
 });
 
  // Cambio en la tarjeta del usuario, cada vez que alguien inicia sesion.
@@ -62,6 +63,7 @@ const peticionPost = (username, password) => {
 
   bodyFormData.append('Username', username);
   bodyFormData.append('Password', password);
+  bodyFormData.append('Role', user.role);
 
   axios({
     method: "post",
@@ -70,12 +72,12 @@ const peticionPost = (username, password) => {
     headers: { "Content-Type": "multipart/form-data" },
   })
     .then(function (response) {
-      console.log(response);
+      console.log(response.data.message);
       //props.history.push('/');
       setLogin(true);
     })
     .catch(function (response) {
-      console.log(response);
+      console.log(response.message);
     });
 
 };

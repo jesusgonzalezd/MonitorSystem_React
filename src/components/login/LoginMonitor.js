@@ -20,7 +20,8 @@ const [login, setLogin] = useState(false);
 // Hook para almacenar las credenciales del usuario.
 const [user, setUser] = useState({
   username: '',
-  password: ''
+  password: '',
+  role: 'Monitor'
 });
 
  // Cambio en la tarjeta del usuario, cada vez que alguien inicia sesion.
@@ -58,6 +59,26 @@ useEffect(() => {
 
 const peticionPost = (username, password) => {
 
+  var bodyFormData = new FormData();
+
+  bodyFormData.append('Username', username);
+  bodyFormData.append('Password', password);
+  bodyFormData.append('Role', user.role);
+
+  axios({
+    method: "post",
+    url: "https://localhost:44322/api/auth/login",
+    data: bodyFormData,
+    headers: { "Content-Type": "multipart/form-data" },
+  })
+    .then(function (response) {
+      console.log(response.data.message);
+      //props.history.push('/');
+      setLogin(true);
+    })
+    .catch(function (response) {
+      console.log(response.message);
+    });
 };
 
 const handleSubmit = (event) => {
@@ -129,7 +150,6 @@ const handleSubmit = (event) => {
                 label="Recuerdame"
               />
               <Button
-                disabled
                 type="submit"
                 fullWidth
                 variant="contained"
