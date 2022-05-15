@@ -96,5 +96,5 @@ return(
 )}
 
 export default GoogleApiWrapper({
-  apiKey: "AIzaSyB3rjwTiwERUQZJ-eY3NqtpfabR04Jqt-E"
+  apiKey: "AIzaSyAL1SkGABwvcHm8nZ6c1xlNCNVcnCi9ye8"
 })(Home)

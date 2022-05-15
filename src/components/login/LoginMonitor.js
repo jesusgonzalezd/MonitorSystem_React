@@ -150,7 +150,7 @@ const handleSubmit = (event) => {
               {login? (
                           <Redirect
                             to={{
-                                pathname: '/',
+                                pathname: '/home',
                                 state: { username: user.username }
                             }}
                           />
