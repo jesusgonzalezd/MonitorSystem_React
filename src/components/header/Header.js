@@ -1,6 +1,6 @@
 import React , {useState, useEffect} from 'react';
 import {AppBar, Box, Toolbar, IconButton, Typography, Container, Avatar, Button, Tooltip, Menu, MenuItem, Badge, ThemeProvider, createTheme, styled} from '@mui/material';
-import {DragHandle, AccountBox, Face, PhotoCamera, Logout, Map, ListAlt, ShareLocation, Home} from '@mui/icons-material';
+import {DragHandle, AccountBox, Face, PhotoCamera, Logout, Map, ListAlt, ShareLocation, Home, Hail} from '@mui/icons-material';
 import axios from 'axios';
 import { withRouter, Link as RouterLink } from 'react-router-dom';
 
@@ -69,28 +69,32 @@ const Header = (props) => {
     username: '',
     email: '',
     department: '',
-    avatar: ''
+    avatar: '',
+    role: ''
   });
 
   useEffect(() => {
 
-        axios.get("https://localhost:44322/api/auth/obtainuser/" + props.username)
+        axios.get("https://localhost:44322/api/auth/obtainuserrole/" + props.username)
           .then((response  => {
             console.log(response.data);
+            console.log("Entro");
 
             setUserin({
-              id: response.data.message.id,
-              firstname: response.data.message.firstName,
-              lastname: response.data.message.lastName,
-              username: response.data.message.userName,
-              email: response.data.message.email,
-              department: response.data.message.department,
-              avatar: response.data.message.avatar
+              id: response.data.user.id,
+              firstname: response.data.user.firstName,
+              lastname: response.data.user.lastName,
+              username: response.data.user.userName,
+              email: response.data.user.email,
+              department: response.data.user.department,
+              avatar: response.data.user.avatar,
+              role: response.data.role,
             });
           }))
           .catch(function (response) {
             console.log(response);
           });
+
   }, [props.username]);
 
   const handleLogout = () => {
@@ -108,6 +112,8 @@ const Header = (props) => {
         console.log(response);
       });
   };
+
+  console.log(userin);
 
   return (
   <ThemeProvider theme={darkTheme}>
@@ -239,6 +245,7 @@ const Header = (props) => {
               onClose={handleCloseUserMenu}
             >
               <MenuItem disabled><Face/>{userin.firstname + " " + userin.lastname}</MenuItem>
+              <MenuItem disabled><Hail/>{userin.role}</MenuItem>
               <MenuItem><AccountBox/>
                 <Typography textAlign="right">Perfil</Typography>
               </MenuItem>
