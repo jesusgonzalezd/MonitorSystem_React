@@ -8,6 +8,7 @@ import Company from '../components/company/Company';
 import LoginMonitor from '../components/login/LoginMonitor';
 import LoginSupervisor from '../components/login/LoginSupervisor';
 import Selector from '../components/selector/Selector';
+import RegisterCompany from '../components/register/RegisterCompany';
 
 // Componente Funcional Routes.
 const Routes = () =>(
@@ -17,6 +18,7 @@ const Routes = () =>(
       <Route exact path = "/loginmonitor" component={LoginMonitor}/>
       <Route exact path = "/loginsupervisor" component={LoginSupervisor}/>
       <Route exact path = "/zonification" component={Zonification}/>
+      <Route exact path = "/registercompany" component={RegisterCompany}/>
       <Route exact path = "/company" component={Company}/>
       <Route exact path = "/home" component={Home}/>
       <Route exact path = "/" component={Selector}/>
