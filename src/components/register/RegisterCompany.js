@@ -52,9 +52,9 @@ const RegisterCompany = (props) => {
     var bodyFormData = new FormData();
 
     bodyFormData.append('Name', company.Name);
-    bodyFormData.append('Area', company.Area + Area);
+    bodyFormData.append('Area', company.Area + area);
     bodyFormData.append('Avatar', avatarC.image);
-    bodyFormData.append('Email', user.Email + direction);
+    bodyFormData.append('Email', company.Email + direction);
 
     axios({
       method: "post",
@@ -73,26 +73,6 @@ const RegisterCompany = (props) => {
 
   useEffect(() => {
 
-      // Obteniendo todas las empresas registradas.
-      axios.get('https://localhost:44322/api/company/getallcompanies')
-        .then(function (response) {
-          let companiesArray = [];
-
-          response.data.forEach(element => {
-              var newCompany = {
-                IdCompany: element.idCompany,
-                Name: element.name,
-                Area: element.area,
-                Email: element.email,
-              }
-
-              companiesArray.push(newCompany);
-        })
-        setCompanies(companiesArray);
-      })
-        .catch(function (response){
-          console.log(response.error);
-        })
   }, []);
 
   // Evento HandleChange para modificar y asignar los datos al Hook.
@@ -121,8 +101,8 @@ const RegisterCompany = (props) => {
         if( (key > 31 && key < 45) || (key > 57 && key < 64) || (key >= 64 && key < 95) || (key > 122 || key === 47 || key === 96)) return;
       
       // Almacenando el usuario en el Hook.
-      setUser({
-        ...user,
+      setCompany({
+        ...company,
         [e.target.name]: e.target.value
       });
   };
@@ -183,18 +163,8 @@ const handleModifiedDirection = (event) => {
   setDirection(event.target.value);
 };
 
-const handleModifiedDepartment = (event) => {
-  setDepartment(event.target.value);
-};
-
-const handleModifiedCompany = (event) => {
-  console.log(event.target.value);
-  setCompany(event.target.value);
-};
-
-const handleModifiedRoles = (event) => {
-  console.log(event.target.value);
-  setRole(event.target.value);
+const handleModifiedArea = (event) => {
+  setArea(event.target.value);
 };
 
   return (
@@ -241,7 +211,7 @@ const handleModifiedRoles = (event) => {
                   id="Name"
                   label="Nombre"
                   autoFocus
-                  value={user.FirstName}
+                  value={company.Name}
                   onChange={handleChange}
                 />
               </Grid>
@@ -254,9 +224,9 @@ const handleModifiedRoles = (event) => {
                      id="demo-simple-select-outlined"
                      required
                      autoWidth
-                     onChange={handleModifiedDepartment}
+                     onChange={handleModifiedArea}
                      defaultValue={""}
-                     name="direction"
+                     name="area"
                 >
                      <MenuItem value={"Audiovisual"}>Audiovisual</MenuItem>
                      <MenuItem value={"Informatica"}>Informatica</MenuItem>
@@ -288,7 +258,7 @@ const handleModifiedRoles = (event) => {
                   autoFocus
                   name="Email"
                   autoComplete="email"
-                  value={user.Email}
+                  value={company.Email}
                   onChange={handleChange}
                 />
               </Grid>
@@ -311,19 +281,7 @@ const handleModifiedRoles = (event) => {
                 </Select>
                 </FormControl>
             </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  required
-                  fullWidth
-                  name="Password"
-                  label="Contraseña"
-                  type="password"
-                  id="Password"
-                  autoComplete="new-password"
-                  value={user.Password}
-                  onChange={handleChange}
-                />
-              </Grid>
+              
               <Grid item xs={12}>
                 <FormControlLabel
                   control={<Checkbox value="allowExtraEmails" color="primary" />}

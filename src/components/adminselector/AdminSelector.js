@@ -2,7 +2,7 @@ import React from 'react';
 import {Avatar, Button, Link, Paper, Box, Grid, Typography, CssBaseline, createTheme, ThemeProvider} from '@mui/material';
 import { Link as RouterLink, withRouter} from 'react-router-dom';
 
-const Selector = (props) => {
+const AdminSelector = (props) => {
 
 const darkTheme = createTheme({
   palette: {
@@ -45,43 +45,46 @@ const darkTheme = createTheme({
             <Avatar sx={{ m: 1, width: 106, height: 106 }} src="https://i.pinimg.com/originals/d7/ae/01/d7ae0170d3d5ffcbaa7f02fdda387a3b.gif" />
 
             <Typography component="h1" variant="h5">
-              Selector de Login
+              Selector de Administrador
             </Typography>
             <Box component="form" sx={{ mt: 1 }}>
               
               <Button
-                to="/loginemployee" component={React.forwardRef((props, ref) => <RouterLink innerRef={ref} {...props} />)} variant="contained"
+                to="/registercompany" component={React.forwardRef((props, ref) => <RouterLink innerRef={ref} {...props} />)} variant="contained"
                 type="submit"
                 fullWidth
                 sx={{ mt: 3, mb: 2 }}
               >
-                Empleado
+                Registro de Empresa
               </Button>
               <Button
-                to="/loginsupervisor" component={React.forwardRef((props, ref) => <RouterLink innerRef={ref} {...props} />)} variant="contained"
+                to="/registerrole" component={React.forwardRef((props, ref) => <RouterLink innerRef={ref} {...props} />)} variant="contained"
                 type="submit"
                 fullWidth
                 sx={{ mt: 3, mb: 2 }}
               >
-                Supervisor
+                Registro de Role
               </Button>
               <Button
-                to="/loginmonitor" component={React.forwardRef((props, ref) => <RouterLink innerRef={ref} {...props} />)} variant="contained"
+                to="/registerarea" component={React.forwardRef((props, ref) => <RouterLink innerRef={ref} {...props} />)} variant="contained"
                 type="submit"
                 fullWidth
                 sx={{ mt: 3, mb: 2 }}
               >
-                Monitor
+                Registro de Area
+              </Button>
+              <Button
+                to="/registerdepartment" component={React.forwardRef((props, ref) => <RouterLink innerRef={ref} {...props} />)} variant="contained"
+                type="submit"
+                fullWidth
+                sx={{ mt: 3, mb: 2 }}
+              >
+                Registro de Departamento
               </Button>
               <Grid container>
                 <Grid item>
-                  <Link to="/signup" component={React.forwardRef((props, ref) => <RouterLink innerRef={ref} {...props} />)} variant="contained">
-                    {"No tienes cuenta? Registrate"}
-                  </Link>
-                </Grid>
-                <Grid item>
-                  <Link to="/adminselector" component={React.forwardRef((props, ref) => <RouterLink innerRef={ref} {...props} />)} variant="contained">
-                    {"Ir al Selector Administrador"}
+                  <Link to="/" component={React.forwardRef((props, ref) => <RouterLink innerRef={ref} {...props} />)} variant="contained">
+                    {"Ir al Selector de Login"}
                   </Link>
                 </Grid>
               </Grid>
@@ -107,4 +110,4 @@ function Copyright() {
   );
 }
 
-export default withRouter(Selector);
+export default withRouter(AdminSelector);
