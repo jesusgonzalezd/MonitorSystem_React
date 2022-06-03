@@ -1,27 +1,50 @@
-import * as React from 'react';
+import React, {useState, useEffect} from 'react';
 import Snackbar from '@mui/material/Snackbar';
-import MuiAlert from '@mui/material/Alert';
-
-const Alert = React.forwardRef(function Alert(props, ref) {
-  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
-});
+import IconButton from '@mui/material/IconButton';
+import CloseIcon from '@mui/icons-material/Close';
+import Alert from '@mui/material/Alert';
 
 const CustomizedSnackbars = (props) => {
-  const [, setOpen] = React.useState(true);
+  const [open, setOpen] = useState(false);
 
   const handleClose = (event, reason) => {
     if (reason === 'clickaway') {
       return;
     }
+
     setOpen(false);
   };
 
+  useEffect(() => {
+
+    if(props.appear)
+      setOpen(true);
+
+  }, [props]);
+
+  const action = (
+    <React.Fragment>
+      <IconButton
+        size="small"
+        aria-label="close"
+        color="inherit"
+        onClick={handleClose}
+      >
+        <CloseIcon fontSize="small" />
+      </IconButton>
+    </React.Fragment>
+  );
+
   return (
     <div>
-      <Snackbar open={props.appear} autoHideDuration={1500} onClose={handleClose}>
-        <Alert onClose={handleClose} severity={props.motive} sx={{ width: '100%' }}>
-          {props.text}
-        </Alert>
+      <Snackbar
+        open={open}
+        autoHideDuration={5000}
+        onClose={handleClose}
+        message={props.text}
+        action={action}
+      >
+        <Alert onClose={handleClose} severity={props.motive} sx={{ width: '100%' }}>{props.text}</Alert>
       </Snackbar>
     </div>
   );

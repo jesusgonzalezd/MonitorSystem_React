@@ -202,25 +202,21 @@ setsnack({ appear: false, });
 
 if(elem.target.files[0].type === "image/jpeg" || elem.target.files[0].type === "image/jpg" || elem.target.files[0].type === "image/png"){
 
-  if(elem.target.files[0].size > 71680){
-    setsnack({
-        motive: 'warning', text: 'La imagen es demasiado grande, elija otra.', appear: true,
-    });
+    if(elem.target.files[0].size > 51680){
+      setsnack({
+          motive: 'warning', text: 'La imagen es demasiado grande, elija otra.', appear: true,
+      });
+    };
 
-    elem.target.value = "";
-    return;
-  };
-
-  // Fijando la imagen tomada al state.
-  avatarC.image = elem.target.files[0];
-}else{
-  elem.target.value = "";
-  setsnack({
-      motive: 'error', text: 'Formato incorrecto. Elija una imagen.', appear: true,
-  });
-
-  return;
-}
+    // Fijando la imagen tomada al state.
+    avatarC.image = elem.target.files[0];
+    } else{
+      setsnack({
+          motive: 'error', text: 'Formato incorrecto. Elija una imagen.', appear: true,
+      });
+    }
+      elem.target.value = "";
+      return;
 }
 
 // Funcion dedicada para modificar las direcciones del correo.
@@ -273,7 +269,7 @@ const handleModifiedRoles = (event) => {
             <Avatar sx={{ m: 1, width: 106, height: 106 }} src="https://i.pinimg.com/originals/d7/ae/01/d7ae0170d3d5ffcbaa7f02fdda387a3b.gif" />
 
             <Typography component="h1" variant="h5">
-              Registro de Empleado
+              Registro de Usuarios
             </Typography>
             <Box component="form" onSubmit={handleSubmit} sx={{ mt: 3 }}>
             <Grid container spacing={2}>
