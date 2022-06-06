@@ -63,11 +63,15 @@ const RegisterCompany = (props) => {
       headers: { "Content-Type": "multipart/form-data" },
     })
       .then(function (response) {
-        console.log(response);
+        setsnack({
+          motive: 'success', text: response.Message, appear: true,
+        });
         props.history.push('/');
       })
       .catch(function (response) {
-        console.log(response);
+        setsnack({
+          motive: 'error', text: response.Message, appear: true,
+      });
       });
   }
 
@@ -130,32 +134,31 @@ const onCrop = (preview) => {
   console.log(avatarC.image.name);
 }
 
-// Verificando el tamaño de la imagen y 
 const onBeforeFileLoad = (elem) => {
 
-setsnack({ appear: false, });
+  setsnack({ appear: false, });
 
-if(elem.target.files[0].type === "image/jpeg" || elem.target.files[0].type === "image/jpg" || elem.target.files[0].type === "image/png"){
+  if(elem.target.files[0].type === "image/jpeg" || elem.target.files[0].type === "image/jpg" || elem.target.files[0].type === "image/png"){
 
-  if(elem.target.files[0].size > 71680){
-    setsnack({
-        motive: 'warning', text: 'La imagen es demasiado grande, elija otra.', appear: true,
-    });
+      if(elem.target.files[0].size > 71680){
+        setsnack({
+            motive: 'warning', text: 'La imagen es demasiado grande', appear: true,
+        });
+        elem.target.value = "";
+      } else{
+          // Fijando la imagen tomada al state.
+          avatarC.image = elem.target.files[0];
+          return;
+      }
+  }
+  else{
+        setsnack({
+            motive: 'error', text: 'Elija una imagen.', appear: true,
+        });
 
-    elem.target.value = "";
-    return;
-  };
-
-  // Fijando la imagen tomada al state.
-  avatarC.image = elem.target.files[0];
-}else{
-  elem.target.value = "";
-  setsnack({
-      motive: 'error', text: 'Formato incorrecto. Elija una imagen.', appear: true,
-  });
-
-  return;
-}
+        elem.target.value = "";
+        return;
+  }
 }
 
 // Funcion dedicada para modificar las direcciones del correo.

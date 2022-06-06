@@ -81,7 +81,7 @@ const darkTheme = createTheme({
               >
                 Registro de Departamento
               </Button>
-              <Grid container>
+              <Grid container alignItems="center" justifyContent="center">
                 <Grid item>
                   <Link to="/" component={React.forwardRef((props, ref) => <RouterLink innerRef={ref} {...props} />)} variant="contained">
                     {"Ir al Selector de Login"}

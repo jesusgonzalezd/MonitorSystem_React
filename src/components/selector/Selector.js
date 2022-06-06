@@ -73,18 +73,17 @@ const darkTheme = createTheme({
               >
                 Monitor
               </Button>
-              <Grid container>
-                <Grid item>
+                <Grid container alignItems="center" justifyContent="center">
                   <Link to="/signup" component={React.forwardRef((props, ref) => <RouterLink innerRef={ref} {...props} />)} variant="contained">
                     {"No tienes cuenta? Registrate"}
                   </Link>
                 </Grid>
-                <Grid item>
+                <br/>
+                <Grid container alignItems="center" justifyContent="center">
                   <Link to="/adminselector" component={React.forwardRef((props, ref) => <RouterLink innerRef={ref} {...props} />)} variant="contained">
                     {"Ir al Selector Administrador"}
                   </Link>
                 </Grid>
-              </Grid>
             </Box>
           </Box>
           <Copyright sx={{ mt: 5 }} />
