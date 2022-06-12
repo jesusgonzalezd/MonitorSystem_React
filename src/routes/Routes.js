@@ -4,7 +4,6 @@ import LoginEmployee from '../components/login/LoginEmployee';
 import Signup from '../components/signup/Signup';
 import Home from '../components/home/Home';
 import Zonification from '../components/zonification/Zonification';
-import Company from '../components/company/Company';
 import LoginMonitor from '../components/login/LoginMonitor';
 import LoginSupervisor from '../components/login/LoginSupervisor';
 import Selector from '../components/selector/Selector';
@@ -27,7 +26,6 @@ const Routes = () =>(
       <Route exact path = "/registerarea" component={RegisterArea}/>
       <Route exact path = "/registerrole" component={RegisterRole}/>
       <Route exact path = "/adminselector" component={AdminSelector}/>
-      <Route exact path = "/company" component={Company}/>
       <Route exact path = "/home" component={Home}/>
       <Route exact path = "/" component={Selector}/>
     </Switch>

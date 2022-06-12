@@ -1,7 +1,7 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useMemo} from 'react';
 import Header from '../header/Header';
-import {Map, GoogleApiWrapper, Marker, InfoWindow} from 'google-maps-react';
-import {Redirect} from 'react-router-dom';
+import {GoogleMap, Polygon, useLoadScript, Marker, InfoWindow} from "@react-google-maps/api";
+import { Link as RouterLink, withRouter, Redirect} from 'react-router-dom';
 
 const Home = (props) =>{
 
@@ -12,6 +12,38 @@ const Home = (props) =>{
       selectedPlace: {},
       showing: false
   });
+
+  const markers = [
+    {
+      id: 1,
+      name: "Chicago, Illinois",
+      position: { lat: 41.881832, lng: -87.623177 }
+    },
+    {
+      id: 2,
+      name: "Denver, Colorado",
+      position: { lat: 39.739235, lng: -104.99025 }
+    },
+    {
+      id: 3,
+      name: "Los Angeles, California",
+      position: { lat: 34.052235, lng: -118.243683 }
+    },
+    {
+      id: 4,
+      name: "New York, New York",
+      position: { lat: 40.712776, lng: -74.005974 }
+    }
+  ];
+
+  const mapContainerStyle = {
+    width: '100%',
+    height: '100vh',
+  };
+
+  const { isLoaded } = useLoadScript({
+    googleMapsApiKey: "AIzaSyAL1SkGABwvcHm8nZ6c1xlNCNVcnCi9ye8"
+  })
 
   useEffect(() => {
 
@@ -51,50 +83,77 @@ const Home = (props) =>{
     const longitude = latLng.lng();
     console.log("Latitud: " + latitude + " Longitud: " + longitude);
 
-    if (showInfoWindow.showing)
+    /*if (showInfoWindow.showing)
     setshowInfoWindow({
         activeMarker: null,
         selectedPlace: '',
         showing: false
-      });
+      });*/
   };
 
-return(
+  const center = useMemo(() => ({lat: 18.762391, lng: -69.439192}), []);
+
+  const [activeMarker, setActiveMarker] = useState(null);
+
+  const handleActiveMarker = (marker) => {
+    if (marker === activeMarker) {
+      return;
+    }
+    setActiveMarker(marker);
+  };
+
+  const handleOnLoad = (map) => {
+    const bounds = new window.google.maps.LatLngBounds();
+    markers.forEach(({ position }) => bounds.extend(position));
+    map.fitBounds(bounds);
+  };
+
+return isLoaded ?(
         <div>
            {props.location.state !== undefined?
              <div>
               <Header username={props.location.state.username}/>
-              <Map className="map"
-                  google={props.google}
-                  onClick={onMapClicked}
-                  style={{ height: "100%", width: "100%" }}
+              <GoogleMap
+                  mapContainerStyle={mapContainerStyle}
                   zoom={7}
-                  initialCenter = {{lat: 18.762391, lng: -69.439192}}
+                  center = {center}
+                  //onLoad={handleOnLoad}
+                  onClick={() => setActiveMarker(null)}
               >
+                {markers.map(({ id, name, position }) => (
+                  <Marker
+                    key={id}
+                    position={position}
+                    onClick={() => handleActiveMarker(id)}
+                    animation={window.google.maps.Animation.BOUNCE}
+                  >
+                    {activeMarker === id ? (
+                      <InfoWindow onCloseClick={() => setActiveMarker(null)}>
+                        <div>{name}</div>
+                      </InfoWindow>
+                    ) : null}
+                  </Marker>
+                ))}
+
                 <Marker
-                  name={"Latitud: " + location.lat + " Longitud: " + location.lng}
                   onClick={onMarkerClick}
-                  position={{ lat: location.lat, lng: location.lng }}
+                  position={location}
+                  animation={window.google.maps.Animation.BOUNCE}
+                  visible={true}
+                  /*icon={{url: '',
+                        anchor: window.google.maps.Point(17, 46),
+                        scaledSize: window.google.maps.Size(37, 37),
+                  }}*/
                 />
 
-                <InfoWindow
-                  marker={showInfoWindow.activeMarker}
-                  onClose={onInfoWindowClose}
-                  visible={showInfoWindow.showing}
-                >
-                  <div>
-                    <h4>{showInfoWindow.selectedPlace.name}</h4>
-                  </div>
-                </InfoWindow>
-            </Map>
+            </GoogleMap>
             </div> :
             <div>
-              <Redirect to="/"/>
+              <Redirect to="/home"/>
             </div>
           }
         </div>
-)}
+) : <></>
+}
 
-export default GoogleApiWrapper({
-  apiKey: "AIzaSyAL1SkGABwvcHm8nZ6c1xlNCNVcnCi9ye8"
-})(Home)
+export default withRouter(Home);

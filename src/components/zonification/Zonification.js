@@ -1,7 +1,8 @@
-import React, {useEffect, useState, useRef, useCallback} from 'react';
+import React, {useEffect, useState, useRef, useCallback, useMemo} from 'react';
 import Header from '../header/Header';
-import {GoogleMap, Polygon, useJsApiLoader, Marker} from "@react-google-maps/api";
+import {GoogleMap, Polygon, useLoadScript, Marker} from "@react-google-maps/api";
 import {Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Slide, Grid, TextField} from '@mui/material';
+import { Link as RouterLink, withRouter, Redirect} from 'react-router-dom';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -24,11 +25,11 @@ const Zonification = (props) =>{
   const[namezone, setNamezone] = useState("");
 
   const mapContainerStyle = {
-    width: '2000px',
-    height: '1000px',
+    width: '100%',
+    height: '100vh',
   };
 
-  const [position, setPosition] = useState();
+  const [, setPosition] = useState();
   
   useEffect(() => {
     if (navigator.geolocation) {
@@ -38,17 +39,13 @@ const Zonification = (props) =>{
           lng: position.coords.longitude,
         });
 
-        setPosition({
-          lat: 18.7623, 
-          lng: -69.4391
-      });
+      
       });
     }
 
     // Manejo de perdida de memoria - Funcion de limpieza
     return () => {
       setLocation({});
-      setPosition({});
     };
   }, []);
 
@@ -90,8 +87,7 @@ const Zonification = (props) =>{
     [onEdit]
   );
 
-  const { isLoaded } = useJsApiLoader({
-    id: 'google-map-script',
+  const { isLoaded } = useLoadScript({
     googleMapsApiKey: "AIzaSyAL1SkGABwvcHm8nZ6c1xlNCNVcnCi9ye8"
   })
 
@@ -156,18 +152,16 @@ const handleCenter = () => {
   setPosition(newPos);
 }
 
+const center = useMemo(() => ({lat: 18.762391, lng: -69.439192}), []);
+
 return isLoaded ?(
 
   <div>
       <Header username={props.location.state.username}/>
       <GoogleMap
         mapContainerStyle={mapContainerStyle}
-        onLoad={onLoad_}
-        onUnmount={onUnmount}
         zoom={7}
-        center = {position}
-        onClick={handleAddNewZone}
-        onDragEnd={handleCenter}
+        center = {center}
       >
         <Grid container spacing={0} direction="column-reverse" alignItems="center" justifyContent="center">
           <Button variant="contained" onClick={handleClickOpen}>
@@ -205,6 +199,11 @@ return isLoaded ?(
 
         <Marker
             position={location}
+            animation={window.google.maps.Animation.BOUNCE}
+            /*icon={{url: '',
+                  anchor: window.google.maps.Point(17, 46),
+                  scaledSize: window.google.maps.Size(37, 37),
+            }}*/
         />
 
         {active?
@@ -244,4 +243,4 @@ return isLoaded ?(
 ) : <></>
 }
 
-export default React.memo(Zonification);
+export default withRouter(Zonification);

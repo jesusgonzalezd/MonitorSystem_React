@@ -161,7 +161,7 @@ const Header = (props) => {
             >
               <MenuItem
                 to={{
-                  pathname: '/',
+                  pathname: '/home',
                   state: { username: userin.username }
                 }}
                 component={React.forwardRef((props, ref) => <RouterLink innerRef={ref} {...props} />)}
@@ -182,7 +182,7 @@ const Header = (props) => {
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
               <Button
                 to={{
-                  pathname: '/',
+                  pathname: '/home',
                   state: { username: userin.username }
                 }}
                 component={React.forwardRef((props, ref) => <RouterLink innerRef={ref} {...props} />)} 
