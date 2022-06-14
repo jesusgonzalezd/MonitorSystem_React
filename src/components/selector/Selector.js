@@ -2,7 +2,7 @@ import React from 'react';
 import {Avatar, Button, Link, Paper, Box, Grid, Typography, CssBaseline, createTheme, ThemeProvider} from '@mui/material';
 import { Link as RouterLink, withRouter} from 'react-router-dom';
 
-const Selector = (props) => {
+const Selector = () => {
 
 const darkTheme = createTheme({
   palette: {

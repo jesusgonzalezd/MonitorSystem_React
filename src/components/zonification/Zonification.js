@@ -73,20 +73,6 @@ const Zonification = (props) =>{
     }
   }, [setPath]);
 
-  // Bind refs to current Polygon and listeners
-  const onLoad = useCallback(
-    polygon => {
-      polygonRef.current = polygon;
-      const path = polygon.getPath();
-      listenersRef.current.push(
-        path.addListener("set_at", onEdit),
-        path.addListener("insert_at", onEdit),
-        path.addListener("remove_at", onEdit)
-      );
-    },
-    [onEdit]
-  );
-
   const { isLoaded } = useLoadScript({
     googleMapsApiKey: "AIzaSyAL1SkGABwvcHm8nZ6c1xlNCNVcnCi9ye8"
   })
@@ -106,6 +92,20 @@ const Zonification = (props) =>{
     map.fitBounds(bounds);
     setMap(map)
   }, [])
+
+  // Bind refs to current Polygon and listeners
+  const onLoad = useCallback(
+    polygon => {
+      polygonRef.current = polygon;
+      const path = polygon.getPath();
+      listenersRef.current.push(
+        path.addListener("set_at", onEdit),
+        path.addListener("insert_at", onEdit),
+        path.addListener("remove_at", onEdit)
+      );
+    },
+    [onEdit]
+  );
 
   const handleAddZone = () => {
       setZones(zones => [...zones, path]);

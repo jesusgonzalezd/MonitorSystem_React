@@ -5,7 +5,7 @@ import { Link as RouterLink, withRouter, Redirect} from 'react-router-dom';
 
 const Home = (props) =>{
 
-  const [location, setLocation] = useState({ lat: "", lng: "", });
+  const [location, setLocation] = useState();
 
   const [showInfoWindow, setshowInfoWindow] = useState({
       activeMarker: {},
