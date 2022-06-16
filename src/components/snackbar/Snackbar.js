@@ -1,25 +1,19 @@
 import React, {useState, useEffect} from 'react';
-import Snackbar from '@mui/material/Snackbar';
-import IconButton from '@mui/material/IconButton';
+import {Snackbar, IconButton, Alert} from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
-import Alert from '@mui/material/Alert';
 
 const CustomizedSnackbars = (props) => {
   const [open, setOpen] = useState(false);
 
   const handleClose = (event, reason) => {
-    if (reason === 'clickaway') {
+    if (reason === 'clickaway')
       return;
-    }
-
     setOpen(false);
   };
 
   useEffect(() => {
-
     if(props.appear)
       setOpen(true);
-
   }, [props]);
 
   const action = (

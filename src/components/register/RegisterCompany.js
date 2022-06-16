@@ -41,11 +41,7 @@ const RegisterCompany = (props) => {
    const inputLabel = useRef(null);
 
   // Contenido del Snackbar.
-  const[snack, setsnack] = useState({
-      motive: '',
-      text: '',
-      appear: false,
-  });
+  const[snack, setsnack] = useState({ });
 
   const peticionPost = async() => {
    
@@ -66,12 +62,11 @@ const RegisterCompany = (props) => {
         setsnack({
           motive: 'success', text: response.data.message, appear: true,
         });
-        //props.history.push('/');
         setshowProgress(false);
       })
-      .catch(function (response) {
+      .catch(function (error) {
         setsnack({
-          motive: 'error', text: response.message, appear: true,
+          motive: 'error', text: error.message, appear: true,
         });
         setshowProgress(false);
       });

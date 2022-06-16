@@ -47,11 +47,7 @@ const Signup = (props) => {
    const inputLabel = useRef(null);
 
   // Contenido del Snackbar.
-  const[snack, setsnack] = useState({
-      motive: '',
-      text: '',
-      appear: false,
-  });
+  const[snack, setsnack] = useState({ });
 
   // Empresas registradas
   const[companies, setCompanies] = useState([]);
@@ -80,11 +76,14 @@ const Signup = (props) => {
       headers: { "Content-Type": "multipart/form-data" },
     })
       .then(function (response) {
-        console.log(response);
-        props.history.push('/');
+        setsnack({
+          motive: 'success', text: response.data.message, appear: true,
+        });
       })
-      .catch(function (response) {
-        console.log(response);
+      .catch(function (error) {
+        setsnack({
+          motive: 'error', text: error.message, appear: true,
+        });
       });
   }
 

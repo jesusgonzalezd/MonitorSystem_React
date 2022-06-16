@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react';
 import axios from 'axios';
 import {Avatar, Button, TextField, FormControlLabel, Checkbox, Link, Paper, Box, Grid, Typography, CssBaseline, createTheme, ThemeProvider} from '@mui/material';
 import { Link as RouterLink, withRouter, Redirect} from 'react-router-dom';
+import Snackbar from '../snackbar/Snackbar';
 
 const LoginSupervisor = (props) => {
 
@@ -23,6 +24,9 @@ const [user, setUser] = useState({
   password: '',
   role: 'Supervisor'
 });
+
+ // Contenido del Snackbar.
+ const[snack, setsnack] = useState({ });
 
  // Cambio en la tarjeta del usuario, cada vez que alguien inicia sesion.
  const handleChange = (e) => {
@@ -72,12 +76,15 @@ const peticionPost = (username, password) => {
     headers: { "Content-Type": "multipart/form-data" },
   })
     .then(function (response) {
-      console.log(response.data.message);
-      //props.history.push('/');
+      setsnack({
+        motive: 'success', text: response.data.message, appear: true,
+      });
       setLogin(true);
     })
-    .catch(function (response) {
-      console.log(response.message);
+    .catch(function (error) {
+      setsnack({
+        motive: 'error', text: error.message, appear: true,
+      });
     });
 };
 
@@ -192,6 +199,10 @@ const handleSubmit = (event) => {
             </Box>
           </Box>
           <Copyright sx={{ mt: 5 }} />
+          {snack.appear?
+            <div> <Snackbar motive={snack.motive} text={snack.text} appear={snack.appear}/> </div>
+            : <div/>
+          }
         </Grid>
       </Grid>
     </ThemeProvider>
