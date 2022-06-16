@@ -64,15 +64,18 @@ const RegisterCompany = (props) => {
     })
       .then(function (response) {
         setsnack({
-          motive: 'success', text: response.Message, appear: true,
+          motive: 'success', text: response.data.message, appear: true,
         });
-        props.history.push('/');
+        //props.history.push('/');
+        setshowProgress(false);
       })
       .catch(function (response) {
         setsnack({
-          motive: 'error', text: response.Message, appear: true,
+          motive: 'error', text: response.message, appear: true,
+        });
+        setshowProgress(false);
       });
-      });
+      
   }
 
   useEffect(() => {
@@ -293,7 +296,7 @@ const handleModifiedArea = (event) => {
               </Grid>
             </Grid>
             {showProgress?
-                <Grid container justify="center" alignItems="center">
+                <Grid container spacing={0} direction="column" alignItems="center" justifyContent="center" style={{ minHeight: '25vh' }}>
                 <div>
                     <CircularProgress disableShrink color="secondary" />
                 </div>
