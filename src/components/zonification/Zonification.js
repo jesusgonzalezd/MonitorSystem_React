@@ -3,6 +3,7 @@ import Header from '../header/Header';
 import {GoogleMap, Polygon, useLoadScript, Marker} from "@react-google-maps/api";
 import {Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Slide, Grid, TextField} from '@mui/material';
 import { Link as RouterLink, withRouter, Redirect} from 'react-router-dom';
+import Snackbar from '../snackbar/Snackbar';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -11,6 +12,9 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 const Zonification = (props) =>{
 
   const [open, setOpen] = React.useState(false);
+
+  // Contenido del Snackbar.
+  const[snack, setsnack] = useState({});
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -38,8 +42,9 @@ const Zonification = (props) =>{
           lat: position.coords.latitude,
           lng: position.coords.longitude,
         });
-
-      
+        setsnack({
+          motive: 'success', text: "Posicion Actualizada", appear: true,
+        });
       });
     }
 

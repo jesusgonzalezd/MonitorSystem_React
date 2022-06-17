@@ -1,17 +1,21 @@
 import React, {useEffect, useState, useMemo} from 'react';
 import Header from '../header/Header';
-import {GoogleMap, Polygon, useLoadScript, Marker, InfoWindow} from "@react-google-maps/api";
+import {GoogleMap, useLoadScript, Marker, InfoWindow} from "@react-google-maps/api";
 import { Link as RouterLink, withRouter, Redirect} from 'react-router-dom';
+import Snackbar from '../snackbar/Snackbar';
 
 const Home = (props) =>{
 
   const [location, setLocation] = useState();
 
-  const [showInfoWindow, setshowInfoWindow] = useState({
+  const [, setshowInfoWindow] = useState({
       activeMarker: {},
       selectedPlace: {},
       showing: false
   });
+
+  // Contenido del Snackbar.
+const[snack, setsnack] = useState({});
 
   const markers = [
     {
@@ -46,15 +50,29 @@ const Home = (props) =>{
   })
 
   useEffect(() => {
-
     if (navigator.geolocation) {
         navigator.geolocation.watchPosition(function(position) {
-        setLocation({
-          lat: position.coords.latitude,
-          lng: position.coords.longitude,
-        });
-      });
+
+          setInterval(() => {
+            setLocation({
+              lat: position.coords.latitude,
+              lng: position.coords.longitude,
+            });
+          }, 5000);
+
+          setsnack({
+              motive: 'success', text: "Posicion Actualizada", appear: true,
+          });
+          },  error => {
+          setsnack({
+              motive: 'error', text: error.code, appear: true,
+          });
+          },{
+              enableHighAccuracy: true,
+              maximumAge: 0,
+          });
     }
+
     // Manejo de perdida de memoria - Funcion de limpieza
     return () => {
       setLocation({});
@@ -68,14 +86,14 @@ const Home = (props) =>{
       showing: true
     });
 
-  const onInfoWindowClose = () =>
+  /*const onInfoWindowClose = () =>
     setshowInfoWindow({
       activeMarker: null,
       selectedPlace: '',
       showing: false
-    });
+    });*/
 
-  const onMapClicked = (t, map, coord) => {
+  /*const onMapClicked = (t, map, coord) => {
 
     // Obtener coordenadas con un click al mapa.
     const { latLng } = coord;
@@ -83,13 +101,13 @@ const Home = (props) =>{
     const longitude = latLng.lng();
     console.log("Latitud: " + latitude + " Longitud: " + longitude);
 
-    /*if (showInfoWindow.showing)
+    if (showInfoWindow.showing)
     setshowInfoWindow({
         activeMarker: null,
         selectedPlace: '',
         showing: false
-      });*/
-  };
+      });
+  };*/
 
   const center = useMemo(() => ({lat: 18.762391, lng: -69.439192}), []);
 
@@ -102,11 +120,11 @@ const Home = (props) =>{
     setActiveMarker(marker);
   };
 
-  const handleOnLoad = (map) => {
+  /*const handleOnLoad = (map) => {
     const bounds = new window.google.maps.LatLngBounds();
     markers.forEach(({ position }) => bounds.extend(position));
     map.fitBounds(bounds);
-  };
+  };*/
 
 return isLoaded ?(
         <div>
@@ -151,6 +169,10 @@ return isLoaded ?(
             <div>
               <Redirect to="/home"/>
             </div>
+          }
+           {snack.appear?
+              <div> <Snackbar motive={snack.motive} text={snack.text} appear={snack.appear}/> </div>
+              : <div/>
           }
         </div>
 ) : <></>

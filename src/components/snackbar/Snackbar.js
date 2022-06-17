@@ -3,6 +3,7 @@ import {Snackbar, IconButton, Alert} from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 
 const CustomizedSnackbars = (props) => {
+
   const [open, setOpen] = useState(false);
 
   const handleClose = (event, reason) => {
@@ -33,7 +34,7 @@ const CustomizedSnackbars = (props) => {
     <div>
       <Snackbar
         open={open}
-        autoHideDuration={5000}
+        autoHideDuration={1500}
         onClose={handleClose}
         message={props.text}
         action={action}
