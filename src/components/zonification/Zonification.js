@@ -2,7 +2,7 @@ import React, {useEffect, useState, useRef, useCallback, useMemo} from 'react';
 import Header from '../header/Header';
 import {GoogleMap, Polygon, useLoadScript, Marker} from "@react-google-maps/api";
 import {Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Slide, Grid, TextField} from '@mui/material';
-import { Link as RouterLink, withRouter, Redirect} from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import Snackbar from '../snackbar/Snackbar';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -33,21 +33,33 @@ const Zonification = (props) =>{
     height: '100vh',
   };
 
-  const [, setPosition] = useState();
+  //const [, setPosition] = useState();
   
   useEffect(() => {
+
     if (navigator.geolocation) {
         navigator.geolocation.watchPosition(function(position) {
-        setLocation({
-          lat: position.coords.latitude,
-          lng: position.coords.longitude,
-        });
-        setsnack({
-          motive: 'success', text: "Posicion Actualizada", appear: true,
-        });
-      });
-    }
 
+          setInterval(() => {
+            setLocation({
+              lat: position.coords.latitude,
+              lng: position.coords.longitude,
+            });
+          }, 5000);
+
+          setsnack({
+              motive: 'success', text: "Posicion Actualizada", appear: true,
+          });
+          },  error => {
+          setsnack({
+              motive: 'error', text: error.code, appear: true,
+          });
+          },{
+              enableHighAccuracy: true,
+              maximumAge: 0,
+          });
+    }
+    
     // Manejo de perdida de memoria - Funcion de limpieza
     return () => {
       setLocation({});
@@ -57,7 +69,7 @@ const Zonification = (props) =>{
   // Code Stack
   const [path, setPath] = useState([]);
 
-  const [active, setActive] = useState(false);
+  const [active, ] = useState(false);
 
   const [zones, setZones] = useState([]);
 
@@ -82,7 +94,7 @@ const Zonification = (props) =>{
     googleMapsApiKey: "AIzaSyAL1SkGABwvcHm8nZ6c1xlNCNVcnCi9ye8"
   })
 
-  const [, setMap] = React.useState(null)
+  //const [, setMap] = React.useState(null)
 
   // Clean up refs
   const onUnmount = useCallback(() => {
@@ -92,11 +104,11 @@ const Zonification = (props) =>{
 
   console.log("The path state is", path);
 
-  const onLoad_ = React.useCallback(function callback(map) {
+  /*const onLoad_ = React.useCallback(function callback(map) {
     const bounds = new window.google.maps.LatLngBounds();
     map.fitBounds(bounds);
     setMap(map)
-  }, [])
+  }, [])*/
 
   // Bind refs to current Polygon and listeners
   const onLoad = useCallback(
@@ -116,7 +128,7 @@ const Zonification = (props) =>{
       setZones(zones => [...zones, path]);
   }
 
-  const handleAddNewZone = (coord) => {
+  /*const handleAddNewZone = (coord) => {
     const { latLng } = coord;
 
     const latitude = latLng.lat();
@@ -134,7 +146,7 @@ const Zonification = (props) =>{
     ])
 
     setActive(true);
-  }
+  }*/
 
   console.log(zones);
 
@@ -147,15 +159,15 @@ const Zonification = (props) =>{
 };
 
 // Referencia del Mapa para obtener sus atributos.
-const mapRef = useRef(null);
+//const mapRef = useRef(null);
 
 //Funcion para fijar el mapa en la ubicacion de la creacion de la nueva zona laboral.
-const handleCenter = () => {
+/*const handleCenter = () => {
   if (!mapRef.current) return;
 
   const newPos = mapRef.current.getCenter().toJSON();
   setPosition(newPos);
-}
+}*/
 
 const center = useMemo(() => ({lat: 18.762391, lng: -69.439192}), []);
 
@@ -244,6 +256,10 @@ return isLoaded ?(
           })
         }
         </GoogleMap>
+        {snack.appear?
+              <div> <Snackbar motive={snack.motive} text={snack.text} appear={snack.appear}/> </div>
+              : <div/>
+          }
     </div>
 ) : <></>
 }

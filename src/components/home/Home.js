@@ -1,8 +1,9 @@
 import React, {useEffect, useState, useMemo} from 'react';
 import Header from '../header/Header';
 import {GoogleMap, useLoadScript, Marker, InfoWindow} from "@react-google-maps/api";
-import { Link as RouterLink, withRouter, Redirect} from 'react-router-dom';
+import { withRouter, Redirect} from 'react-router-dom';
 import Snackbar from '../snackbar/Snackbar';
+import axios from 'axios';
 
 const Home = (props) =>{
 
@@ -15,7 +16,7 @@ const Home = (props) =>{
   });
 
   // Contenido del Snackbar.
-const[snack, setsnack] = useState({});
+  const[snack, setsnack] = useState({});
 
   const markers = [
     {
@@ -50,6 +51,7 @@ const[snack, setsnack] = useState({});
   })
 
   useEffect(() => {
+
     if (navigator.geolocation) {
         navigator.geolocation.watchPosition(function(position) {
 
@@ -58,7 +60,36 @@ const[snack, setsnack] = useState({});
               lat: position.coords.latitude,
               lng: position.coords.longitude,
             });
-          }, 5000);
+
+            // Envio de Locations a la base de datos.
+            function saveLocations () {
+                var bodyFormData = new FormData();
+              
+                bodyFormData.append('Username', props.location.state.username);
+                bodyFormData.append('Latitude', position.coords.latitude);
+                bodyFormData.append('Longitude', position.coords.longitude);
+              
+                axios({
+                  method: "post",
+                  url: "https://localhost:44322/api/location/register",
+                  data: bodyFormData,
+                  headers: { "Content-Type": "multipart/form-data" },
+                })
+                  .then(function (response) {
+                    setsnack({
+                      motive: 'success', text: response.data.message, appear: true,
+                    });
+                  })
+                  .catch(function (error) {
+                    setsnack({
+                      motive: 'error', text: error.message, appear: true,
+                    });
+                  });
+                };
+
+                saveLocations();
+
+            }, 7000);
 
           setsnack({
               motive: 'success', text: "Posicion Actualizada", appear: true,
@@ -77,7 +108,7 @@ const[snack, setsnack] = useState({});
     return () => {
       setLocation({});
     };
-  }, []);
+  }, [props]);
 
   const onMarkerClick = (props, marker) =>
     setshowInfoWindow({
