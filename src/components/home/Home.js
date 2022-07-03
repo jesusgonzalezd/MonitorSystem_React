@@ -9,12 +9,6 @@ const Home = (props) =>{
 
   const [location, setLocation] = useState();
 
-  const [, setshowInfoWindow] = useState({
-      activeMarker: {},
-      selectedPlace: {},
-      showing: false
-  });
-
   // Contenido del Snackbar.
   const[snack, setsnack] = useState({});
 
@@ -38,7 +32,7 @@ const Home = (props) =>{
       id: 4,
       name: "New York, New York",
       position: { lat: 40.712776, lng: -74.005974 }
-    }
+    },
   ];
 
   const mapContainerStyle = {
@@ -50,73 +44,69 @@ const Home = (props) =>{
     googleMapsApiKey: "AIzaSyAL1SkGABwvcHm8nZ6c1xlNCNVcnCi9ye8"
   })
 
+  const [, setAccuracy] = useState();
+  const [, setError] = useState();
+
   useEffect(() => {
-
     if (navigator.geolocation) {
-        navigator.geolocation.watchPosition(function(position) {
+      const geoId = navigator.geolocation.watchPosition(
+        (position) => {
+          const lat = position.coords.latitude;
+          const lng = position.coords.longitude;
 
-          setInterval(() => {
-            setLocation({
-              lat: position.coords.latitude,
-              lng: position.coords.longitude,
-            });
+          if (position.coords.accuracy > 10) {
 
-            // Envio de Locations a la base de datos.
-            function saveLocations () {
-                var bodyFormData = new FormData();
-              
-                bodyFormData.append('Username', props.location.state.username);
-                bodyFormData.append('Latitude', position.coords.latitude);
-                bodyFormData.append('Longitude', position.coords.longitude);
-              
-                axios({
-                  method: "post",
-                  url: "https://localhost:44322/api/location/register",
-                  data: bodyFormData,
-                  headers: { "Content-Type": "multipart/form-data" },
-                })
-                  .then(function (response) {
-                    setsnack({
-                      motive: 'success', text: response.data.message, appear: true,
-                    });
+                setsnack({ motive: 'info', text: "La precision del GPS no es suficientemente estable.", appear: true, });
+                setLocation({ lat, lng });
+                setAccuracy(position.coords.accuracy);
+                console.log({ lat, lng }, position.coords.accuracy);
+
+                // Envio de Locations a la base de datos.
+                function saveLocations () {
+                  var bodyFormData = new FormData();
+                
+                  bodyFormData.append('Username', props.username);
+                  bodyFormData.append('Latitude', position.coords.latitude);
+                  bodyFormData.append('Longitude', position.coords.longitude);
+                
+                  axios({
+                    method: "post",
+                    url: "https://localhost:44322/api/location/register",
+                    data: bodyFormData,
+                    headers: { "Content-Type": "multipart/form-data" },
                   })
-                  .catch(function (error) {
-                    setsnack({
-                      motive: 'error', text: error.message, appear: true,
+                    .then(function (response) {
+                      setsnack({
+                        motive: 'success', text: response.data.message, appear: true,
+                      });
+                    })
+                    .catch(function (error) {
+                      setsnack({
+                        motive: 'error', text: error.message, appear: true,
+                      });
                     });
-                  });
-                };
+                  };
 
-                saveLocations();
-
-            }, 7000);
-
+                  saveLocations();
+         }
+        },
+        (e) => {
           setsnack({
-              motive: 'success', text: "Posicion Actualizada", appear: true,
+            motive: 'error', text: e.message, appear: true,
           });
-          },  error => {
-          setsnack({
-              motive: 'error', text: error.code, appear: true,
-          });
-          },{
-              enableHighAccuracy: true,
-              maximumAge: 0,
-          });
+          setError(e.message);
+        },
+        { enableHighAccuracy: true, maximumAge: 2000, timeout: 5000 }
+      );
+      return () => {
+        setsnack({
+          motive: 'error', text: 'Clear Watch', appear: true,
+        });
+        window.navigator.geolocation.clearWatch(geoId);
+      };
     }
-
-    // Manejo de perdida de memoria - Funcion de limpieza
-    return () => {
-      setLocation({});
-    };
-  }, [props]);
-
-  const onMarkerClick = (props, marker) =>
-    setshowInfoWindow({
-      activeMarker: marker,
-      selectedPlace: props,
-      showing: true
-    });
-
+  }, [props.username]);
+  
   /*const onInfoWindowClose = () =>
     setshowInfoWindow({
       activeMarker: null,
@@ -185,7 +175,6 @@ return isLoaded ?(
                 ))}
 
                 <Marker
-                  onClick={onMarkerClick}
                   position={location}
                   animation={window.google.maps.Animation.BOUNCE}
                   visible={true}
@@ -193,7 +182,8 @@ return isLoaded ?(
                         anchor: window.google.maps.Point(17, 46),
                         scaledSize: window.google.maps.Size(37, 37),
                   }}*/
-                />
+                >
+                </Marker>
 
             </GoogleMap>
             </div> :

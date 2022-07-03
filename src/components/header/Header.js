@@ -74,28 +74,23 @@ const Header = (props) => {
   });
 
   useEffect(() => {
-
         axios.get("https://localhost:44322/api/auth/obtainuserrole/" + props.username)
-          .then((response  => {
-            console.log(response.data);
-            console.log("Entro");
-
-            setUserin({
-              id: response.data.user.id,
-              firstname: response.data.user.firstName,
-              lastname: response.data.user.lastName,
-              username: response.data.user.userName,
-              email: response.data.user.email,
-              department: response.data.user.department,
-              avatar: response.data.user.avatar,
-              role: response.data.role,
-            });
-          }))
-          .catch(function (response) {
-            console.log(response);
-          });
-
-  }, [props.username]);
+              .then((response  => {
+                setUserin({
+                  id: response.data.user.id,
+                  firstname: response.data.user.firstName,
+                  lastname: response.data.user.lastName,
+                  username: response.data.user.userName,
+                  email: response.data.user.email,
+                  department: response.data.user.department,
+                  avatar: response.data.user.avatar,
+                  role: response.data.role,
+                });
+              }))
+              .catch(function (response) {
+                console.log(response);
+              });
+}, [props.username]);
 
   const handleLogout = () => {
 
@@ -112,8 +107,6 @@ const Header = (props) => {
         console.log(response);
       });
   };
-
-  console.log(userin);
 
   return (
   <ThemeProvider theme={darkTheme}>
