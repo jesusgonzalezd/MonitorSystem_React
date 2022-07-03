@@ -46,89 +46,83 @@ const Home = (props) =>{
 
   const [, setAccuracy] = useState();
   const [, setError] = useState();
+  const [role, setRole] = useState();
 
   useEffect(() => {
-    if (navigator.geolocation) {
-      const geoId = navigator.geolocation.watchPosition(
-        (position) => {
-          const lat = position.coords.latitude;
-          const lng = position.coords.longitude;
 
-          if (position.coords.accuracy > 10) {
+    axios.get("https://localhost:44322/api/administration/obtainuserrole/" + props.location.state.username)
+    .then((response  => {
+        setRole(response.data.role);
+    }))
+    .catch(function (response) {
+      console.log(response);
+    });
+    
+    if(role === 'Employee'){
+            if (navigator.geolocation) {
+              const geoId = navigator.geolocation.watchPosition(
+                (position) => {
+                  const lat = position.coords.latitude;
+                  const lng = position.coords.longitude;
 
-                setsnack({ motive: 'info', text: "La precision del GPS no es suficientemente estable.", appear: true, });
-                setLocation({ lat, lng });
-                setAccuracy(position.coords.accuracy);
-                console.log({ lat, lng }, position.coords.accuracy);
+                  if (position.coords.accuracy > 10) {
 
-                // Envio de Locations a la base de datos.
-                function saveLocations () {
-                  var bodyFormData = new FormData();
-                
-                  bodyFormData.append('Username', props.username);
-                  bodyFormData.append('Latitude', position.coords.latitude);
-                  bodyFormData.append('Longitude', position.coords.longitude);
-                
-                  axios({
-                    method: "post",
-                    url: "https://localhost:44322/api/location/register",
-                    data: bodyFormData,
-                    headers: { "Content-Type": "multipart/form-data" },
-                  })
-                    .then(function (response) {
-                      setsnack({
-                        motive: 'success', text: response.data.message, appear: true,
-                      });
-                    })
-                    .catch(function (error) {
-                      setsnack({
-                        motive: 'error', text: error.message, appear: true,
-                      });
-                    });
-                  };
+                        setsnack({ motive: 'info', text: "La precision del GPS no es suficientemente estable.", appear: true, });
+                        setLocation({ lat, lng });
+                        setAccuracy(position.coords.accuracy);
+                        console.log({ lat, lng }, position.coords.accuracy);
 
-                  saveLocations();
-         }
-        },
-        (e) => {
-          setsnack({
-            motive: 'error', text: e.message, appear: true,
-          });
-          setError(e.message);
-        },
-        { enableHighAccuracy: true, maximumAge: 2000, timeout: 5000 }
-      );
-      return () => {
-        setsnack({
-          motive: 'error', text: 'Clear Watch', appear: true,
-        });
-        window.navigator.geolocation.clearWatch(geoId);
-      };
+                        // Envio de Locations a la base de datos.
+                        function saveLocations () {
+                          var bodyFormData = new FormData();
+                        
+                          bodyFormData.append('Username', props.location.state.username);
+                          bodyFormData.append('Latitude', position.coords.latitude);
+                          bodyFormData.append('Longitude', position.coords.longitude);
+                        
+                          axios({
+                            method: "post",
+                            url: "https://localhost:44322/api/location/register",
+                            data: bodyFormData,
+                            headers: { "Content-Type": "multipart/form-data" },
+                          })
+                            .then(function (response) {
+                              setsnack({
+                                motive: 'success', text: response.data.message, appear: true,
+                              });
+                            })
+                            .catch(function (error) {
+                              setsnack({
+                                motive: 'error', text: error.message, appear: true,
+                              });
+                            });
+                          };
+                          saveLocations();
+                }
+                },
+                (e) => {
+                  setsnack({
+                    motive: 'error', text: e.message, appear: true,
+                  });
+                  setError(e.message);
+                },
+                { enableHighAccuracy: true, maximumAge: 2000, timeout: 5000 }
+              );
+              return () => {
+                setsnack({
+                  motive: 'error', text: 'Clear Watch', appear: true,
+                });
+                window.navigator.geolocation.clearWatch(geoId);
+              };
+            }
     }
-  }, [props.username]);
-  
-  /*const onInfoWindowClose = () =>
-    setshowInfoWindow({
-      activeMarker: null,
-      selectedPlace: '',
-      showing: false
-    });*/
+  }, [role, props.location.state.username]);
 
-  /*const onMapClicked = (t, map, coord) => {
-
-    // Obtener coordenadas con un click al mapa.
-    const { latLng } = coord;
-    const latitude = latLng.lat();
-    const longitude = latLng.lng();
+  const onMapClicked = (coord) => {
+    const latitude = coord.latLng.lat();
+    const longitude = coord.latLng.lng();
     console.log("Latitud: " + latitude + " Longitud: " + longitude);
-
-    if (showInfoWindow.showing)
-    setshowInfoWindow({
-        activeMarker: null,
-        selectedPlace: '',
-        showing: false
-      });
-  };*/
+  };
 
   const center = useMemo(() => ({lat: 18.762391, lng: -69.439192}), []);
 
@@ -141,12 +135,6 @@ const Home = (props) =>{
     setActiveMarker(marker);
   };
 
-  /*const handleOnLoad = (map) => {
-    const bounds = new window.google.maps.LatLngBounds();
-    markers.forEach(({ position }) => bounds.extend(position));
-    map.fitBounds(bounds);
-  };*/
-
 return isLoaded ?(
         <div>
            {props.location.state !== undefined?
@@ -156,8 +144,7 @@ return isLoaded ?(
                   mapContainerStyle={mapContainerStyle}
                   zoom={7}
                   center = {center}
-                  //onLoad={handleOnLoad}
-                  onClick={() => setActiveMarker(null)}
+                  onClick={coord => onMapClicked(coord)}
               >
                 {markers.map(({ id, name, position }) => (
                   <Marker
@@ -178,10 +165,10 @@ return isLoaded ?(
                   position={location}
                   animation={window.google.maps.Animation.BOUNCE}
                   visible={true}
-                  /*icon={{url: '',
+                  icon={{url: "https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png",
                         anchor: window.google.maps.Point(17, 46),
                         scaledSize: window.google.maps.Size(37, 37),
-                  }}*/
+                  }}
                 >
                 </Marker>
 
