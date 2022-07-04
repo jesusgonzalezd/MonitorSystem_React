@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import axios from 'axios';
 import {Avatar, Button, TextField, FormControlLabel, Checkbox, Link, Paper, Box, Grid, Typography, CssBaseline, createTheme, ThemeProvider} from '@mui/material';
-import { Link as RouterLink, withRouter, Redirect} from 'react-router-dom';
+import { Link as RouterLink, withRouter, Navigate} from 'react-router-dom';
 import Snackbar from '../snackbar/Snackbar';
 
 const LoginSupervisor = (props) => {
@@ -175,7 +175,7 @@ const handleSubmit = (event) => {
 
               <div>
               {login? (
-                          <Redirect
+                          <Navigate
                             to={{
                                 pathname: '/home',
                                 state: { username: user.username }
@@ -222,4 +222,4 @@ function Copyright() {
   );
 }
 
-export default withRouter(LoginSupervisor);
+export default LoginSupervisor;

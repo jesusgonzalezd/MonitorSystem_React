@@ -106,4 +106,4 @@ function Copyright() {
   );
 }
 
-export default withRouter(Selector);
+export default Selector;

@@ -263,4 +263,4 @@ const Header = (props) => {
   </ThemeProvider>
   );
 };
-export default withRouter(Header);
+export default Header;

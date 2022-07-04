@@ -1,11 +1,11 @@
 import React, {useEffect, useState, useMemo} from 'react';
 import Header from '../header/Header';
 import {GoogleMap, useLoadScript, Marker, InfoWindow} from "@react-google-maps/api";
-import { withRouter, Redirect} from 'react-router-dom';
+import { withRouter, Navigate} from 'react-router-dom';
 import Snackbar from '../snackbar/Snackbar';
 import axios from 'axios';
 
-const Home = (props) =>{
+const Tracking = (props) =>{
 
   const [location, setLocation] = useState();
 
@@ -198,7 +198,7 @@ return isLoaded ?(
             </GoogleMap>
             </div> :
             <div>
-              <Redirect to="/home"/>
+              <Navigate to="/home"/>
             </div>
           }
            {snack.appear?
@@ -209,4 +209,4 @@ return isLoaded ?(
 ) : <></>
 }
 
-export default withRouter(Home);
+export default Tracking;

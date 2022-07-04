@@ -5,6 +5,20 @@ import reportWebVitals from './reportWebVitals';
 import { BrowserRouter } from 'react-router-dom'
 import Routes from './routes/Routes';
 
+
+import App from './App';
+
+import {ContextProvider} from './context/ContextProvider';
+
+
+ReactDOM.render(
+  <ContextProvider>
+    <App/>
+  </ContextProvider>,
+  document.getElementById('root')
+);
+
+/*
 ReactDOM.render(
   <BrowserRouter>
   <div>
@@ -12,7 +26,7 @@ ReactDOM.render(
   </div>
 </BrowserRouter>,
   document.getElementById('root')
-);
+); */
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))
