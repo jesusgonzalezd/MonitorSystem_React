@@ -8,7 +8,7 @@ import './App.css';
 
 import { Sidebar, ThemeSettings, Navbar } from './components';
 
-import { Home, ColorPicker, Employees, Kanban, Tracking, Zonification, Calendar, Line, Pie } from './pages';
+import { Home, ColorPicker, Employees, Kanban, Editor, Tracking, Zonification, Calendar, Line, Pie } from './pages';
 
 import { useStateContext } from './context/ContextProvider';
 
@@ -72,8 +72,8 @@ const App = () => {
                 <Route path="/tracking" element="Ecommerce"  />
                 <Route exact path = "/selector" component={Selector}/> 
                 {/* apps  */}
-                <Route path="/kanban" element="{<Kanban />}"   />
-                <Route path="/editor" element="Ecommerce"  />
+                <Route path="/kanban" element={<Kanban />} />
+                <Route path="/editor" element={<Editor />}  />
                 <Route path="/calendario" element={<Calendar />}  />
                 <Route path="/color-picker" element="{<ColorPicker />}"  />
 
