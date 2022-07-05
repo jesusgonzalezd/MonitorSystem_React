@@ -129,7 +129,7 @@ const Home = () => {
                 <Button
                   color="white"
                   bgColor={currentColor}
-                  text="Download Report"
+                  text="Descargar Reporte Mensual"
                   borderRadius="10px"
                 />
               </div>
@@ -139,7 +139,7 @@ const Home = () => {
             </div>
           </div>
 
-
+          
 
 
 

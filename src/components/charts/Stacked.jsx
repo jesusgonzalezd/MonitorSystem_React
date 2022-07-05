@@ -10,6 +10,7 @@ const Stacked = ({ width, height }) => {
   return (
     <ChartComponent
       id="charts"
+      //Lo que se usa para eje x y Y
       primaryXAxis={stackedPrimaryXAxis}
       primaryYAxis={stackedPrimaryYAxis}
       width={width}

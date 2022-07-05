@@ -5,6 +5,7 @@ class SparkLine extends React.PureComponent {
   render() {
     const { id, height, width, color, data, type, currentColor } = this.props;
 
+    {/**Se le pasa los props */}
     return (
       <SparklineComponent
         id={id}
@@ -14,6 +15,8 @@ class SparkLine extends React.PureComponent {
         valueType="Numeric"
         fill={color}
         border={{ color: currentColor, width: 2 }}
+
+        /**Servicio para ver la data al hacer hover */
         tooltipSettings={{
           visible: true,
           // eslint-disable-next-line no-template-curly-in-string
@@ -28,6 +31,7 @@ class SparkLine extends React.PureComponent {
         yName="yval"
         type={type}
       >
+        
         <Inject services={[SparklineTooltip]} />
       </SparklineComponent>
     );

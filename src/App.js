@@ -12,6 +12,7 @@ import { Home, ColorPicker, Employees, Kanban, Tracking, Zonification, Calendar,
 
 import { useStateContext } from './context/ContextProvider';
 
+import Selector from './components/selector/Selector';
 
 const App = () => {
 
@@ -66,15 +67,14 @@ const App = () => {
 
               {/* pages  */}
               <Route path="/orders" element="orders"  />
-                <Route path="/employees" element={<Employees />}  />
+                <Route path="/empleados" element={<Employees />}  />
                 <Route path="/customers" element="customer"  />
                 <Route path="/tracking" element="Ecommerce"  />
-
-
+                <Route exact path = "/selector" component={Selector}/> 
                 {/* apps  */}
                 <Route path="/kanban" element="{<Kanban />}"   />
                 <Route path="/editor" element="Ecommerce"  />
-                <Route path="/calendar" element={<Calendar />}  />
+                <Route path="/calendario" element={<Calendar />}  />
                 <Route path="/color-picker" element="{<ColorPicker />}"  />
 
                 {/* charts  */}

@@ -10,6 +10,7 @@ export { default as SparkLine } from './charts/SparkLine';
 export { default as Stacked } from './charts/Stacked';
 export { default as ChartsHeader } from './chartsheader/ChartsHeader';
 export { default as Header } from './header/Header';
+export { default as HeaderTable } from './header/HeaderTable';
 export { default as AdminSelector} from './adminselector/AdminSelector';
 export { default as LoginEmployee } from './login/LoginEmployee';
 export { default as LoginMonitor } from './login/LoginMonitor';
