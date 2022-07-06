@@ -16,26 +16,40 @@ import Selector from './components/selector/Selector';
 
 const App = () => {
 
-  const { activeMenu } = useStateContext();
+  const { setCurrentColor, setCurrentMode, currentMode, activeMenu, currentColor, themeSettings, setThemeSettings } = useStateContext();
+
+
+  useEffect(() => {
+    const currentThemeColor = localStorage.getItem('colorMode');
+    const currentThemeMode = localStorage.getItem('themeMode');
+    if (currentThemeColor && currentThemeMode) {
+      setCurrentColor(currentThemeColor);
+      setCurrentMode(currentThemeMode);
+    }
+  }, []);
 
   return (
-    <div>
+    <div className={currentMode === 'Dark' ? 'dark' : ''}>
       <BrowserRouter>
-      <div className="flex relative dark:bg-main-dark-bg">
-        <div className="fixed right-4 bottom-4" style={{ zIndex: '1000' }}>
-           {/* Componente Syncfution para configuración */}
+        <div className="flex relative dark:bg-main-dark-bg">
+          <div className="fixed right-4 bottom-4" style={{ zIndex: "1000" }}>
+            {/* Componente Syncfution para configuración */}
             <TooltipComponent content="Configuración" position="Top">
-              <button type= "button" className="text-3xl text-white p-3 hover:drop-shadow-xl hover:bg-light-gray"
-              style={{background:'blue', borderRadius:'50%'}}>
-                <FiSettings/>
+              <button
+                type="button"
+                onClick={() => setThemeSettings(true)}
+                style={{ background: currentColor, borderRadius: '50%' }}
+                className="text-3xl text-white p-3 hover:drop-shadow-xl hover:bg-light-gray"
+              >
+                <FiSettings />
               </button>
             </TooltipComponent>
           </div>
           {/* Creando Sidebar. Si está activo se muestra */}
           {activeMenu ? (
-           <div className="w-72 fixed sidebar dark:bg-secondary-dark-bg bg-white ">
-             <Sidebar />
-           </div>
+            <div className="w-72 fixed sidebar dark:bg-secondary-dark-bg bg-white ">
+              <Sidebar />
+            </div>
           ) : (
             <div className="w-0 dark:bg-secondary-dark-bg">
               <Sidebar />
@@ -45,52 +59,48 @@ const App = () => {
           <div
             className={
               activeMenu
-                ? 'dark:bg-main-dark-bg  bg-main-bg min-h-screen md:ml-72 w-full  '
-                : 'bg-main-bg dark:bg-main-dark-bg  w-full min-h-screen flex-2 '
+                ? "dark:bg-main-dark-bg  bg-main-bg min-h-screen md:ml-72 w-full  "
+                : "bg-main-bg dark:bg-main-dark-bg  w-full min-h-screen flex-2 "
             }
           >
             <div className="fixed md:static bg-main-bg dark:bg-main-dark-bg navbar w-full ">
               <Navbar />
             </div>
-          
 
             {/* Div for Routes */}
             <div>
-          <Routes>
-              
+              {themeSettings && (<ThemeSettings />)}
 
-              {/* RUTA DASHBOARD */}
-              {/* home */}
-              <Route path="/" element={(<Home/>)} />
-              {/* home desde navbar */}
-              <Route path="/home" element={(<Home/>)} />
+              <Routes>
+                {/* RUTA DASHBOARD */}
+                {/* home */}
+                <Route path="/" element={<Home />} />
+                {/* home desde navbar */}
+                <Route path="/home" element={<Home />} />
 
-              {/* pages  */}
-              <Route path="/orders" element="orders"  />
-                <Route path="/empleados" element={<Employees />}  />
-                <Route path="/customers" element="customer"  />
-                <Route path="/tracking" element="Ecommerce"  />
-                <Route exact path = "/selector" component={Selector}/> 
+                {/* pages  */}
+                <Route path="/orders" element="orders" />
+                <Route path="/empleados" element={<Employees />} />
+                <Route path="/customers" element="customer" />
+                <Route path="/tracking" element="Ecommerce" />
+                <Route exact path="/selector" component={Selector} />
                 {/* apps  */}
                 <Route path="/kanban" element={<Kanban />} />
-                <Route path="/editor" element={<Editor />}  />
-                <Route path="/calendario" element={<Calendar />}  />
-                <Route path="/color-picker" element="{<ColorPicker />}"  />
+                <Route path="/editor" element={<Editor />} />
+                <Route path="/calendario" element={<Calendar />} />
+                <Route path="/color-picker" element={<ColorPicker />} />
 
                 {/* charts  */}
-                <Route path="/line" element={(<Line/>)}  />
+                <Route path="/line" element={<Line />} />
                 <Route path="/area" element="Ecommerce" />
                 <Route path="/bar" element="Ecommerce" />
-                <Route path="/pie" element={<Pie />}  />
-                <Route path="/financial" element="Ecommerce"  />
-                <Route path="/color-mapping" element="Ecommerce"  />
-                <Route path="/pyramid" element="Ecommerce"  />
-                <Route path="/stacked" element="Ecommerce"  />
-
-
-                           
-            </Routes>
-          </div>
+                <Route path="/pie" element={<Pie />} />
+                <Route path="/financial" element="Ecommerce" />
+                <Route path="/color-mapping" element="Ecommerce" />
+                <Route path="/pyramid" element="Ecommerce" />
+                <Route path="/stacked" element="Ecommerce" />
+              </Routes>
+            </div>
           </div>
         </div>
       </BrowserRouter>

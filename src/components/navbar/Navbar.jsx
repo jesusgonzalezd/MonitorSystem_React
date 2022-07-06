@@ -31,7 +31,7 @@ const NavButton = ({ title, customFunc, icon, color, dotColor }) => (
 
 const Navbar = () => {
 
-  const { activeMenu, setActiveMenu, handleClick, isClicked, setScreenSize, screenSize } = useStateContext();
+  const { currentColor, activeMenu, setActiveMenu, handleClick, isClicked, setScreenSize, screenSize } = useStateContext();
 
   useEffect(() => {
     const handleResize = () => setScreenSize(window.innerWidth);
@@ -57,9 +57,9 @@ const Navbar = () => {
   return (
     <div className='flex justify-between p-2 md:mx-6 relative'>
       <NavButton title="Menu" 
-      customFunc={()=> setActiveMenu((prevActiveMenu) => !prevActiveMenu)} 
-      color="blue" icon={<AiOutlineMenu />}/>
-   
+      customFunc={handleActiveMenu} 
+      color={currentColor} icon={<AiOutlineMenu />} />
+      
 
        {/* Acá se pueden colocar otros botones  */}
       <div className='flex'>
