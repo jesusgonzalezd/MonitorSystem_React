@@ -12,28 +12,7 @@ const Home = (props) =>{
   // Contenido del Snackbar.
   const[snack, setsnack] = useState({});
 
-  const markers = [
-    {
-      id: 1,
-      name: "Chicago, Illinois",
-      position: { lat: 41.881832, lng: -87.623177 }
-    },
-    {
-      id: 2,
-      name: "Denver, Colorado",
-      position: { lat: 39.739235, lng: -104.99025 }
-    },
-    {
-      id: 3,
-      name: "Los Angeles, California",
-      position: { lat: 34.052235, lng: -118.243683 }
-    },
-    {
-      id: 4,
-      name: "New York, New York",
-      position: { lat: 40.712776, lng: -74.005974 }
-    },
-  ];
+  const [markerEmployees, setmarkerEmployees] = useState([]);
 
   const mapContainerStyle = {
     width: '100%',
@@ -50,6 +29,7 @@ const Home = (props) =>{
 
   useEffect(() => {
 
+    // Traera el role del usuario logueado mediante su username.
     axios.get("https://localhost:44322/api/administration/obtainuserrole/" + props.location.state.username)
     .then((response  => {
         setRole(response.data.role);
@@ -57,8 +37,32 @@ const Home = (props) =>{
     .catch(function (response) {
       console.log(response);
     });
+
+          // Traera el idCompany de la empresa a la cual trabaja el usuario logueado mediante su username.
+          axios.get("https://localhost:44322/api/company/ObtainIdCompanyEmployee/" + props.location.state.username)
+          .then((response  => {
+
+              var idCompany = response.data.idCompany;
+
+            setInterval(function() {
+              if(role === 'Monitor'){
+                    axios.get("https://localhost:44322/api/location/GetAllEmployeesLastLocation/" + idCompany)
+                    .then((response  => {
+                        console.log("Prueba");
+                        setmarkerEmployees(response.data);
+                    }))
+                    .catch(function (response) {
+                      console.log(response);
+                    });
+              }
+            }, 5000);
+            //clearInterval(interval);
+          }))
+          .catch(function (response) {
+            console.log(response);
+          });
     
-    if(role === 'Employee'){
+      if(role === 'Employee'){
             if (navigator.geolocation) {
               const geoId = navigator.geolocation.watchPosition(
                 (position) => {
@@ -116,6 +120,7 @@ const Home = (props) =>{
               };
             }
     }
+
   }, [role, props.location.state.username]);
 
   const onMapClicked = (coord) => {
@@ -135,6 +140,8 @@ const Home = (props) =>{
     setActiveMarker(marker);
   };
 
+  console.log(markerEmployees);
+
 return isLoaded ?(
         <div>
            {props.location.state !== undefined?
@@ -146,31 +153,31 @@ return isLoaded ?(
                   center = {center}
                   onClick={coord => onMapClicked(coord)}
               >
-                {markers.map(({ id, name, position }) => (
+                {markerEmployees.map(({ idLocation, firstName, latitude, longitude }) => (
                   <Marker
-                    key={id}
-                    position={position}
-                    onClick={() => handleActiveMarker(id)}
+                    key={idLocation}
+                    position={{lat: latitude, lng: longitude}}
+                    onClick={() => handleActiveMarker(idLocation)}
                     animation={window.google.maps.Animation.BOUNCE}
                   >
-                    {activeMarker === id ? (
+                    {activeMarker === idLocation ? (
                       <InfoWindow onCloseClick={() => setActiveMarker(null)}>
-                        <div>{name}</div>
+                        <div>{markerEmployees.employee.firstName}</div>
                       </InfoWindow>
                     ) : null}
                   </Marker>
                 ))}
 
+              {role === 'Employee'?
+              <div>
                 <Marker
                   position={location}
                   animation={window.google.maps.Animation.BOUNCE}
                   visible={true}
-                  icon={{url: "https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png",
-                        anchor: window.google.maps.Point(17, 46),
-                        scaledSize: window.google.maps.Size(37, 37),
-                  }}
                 >
                 </Marker>
+                </div> : <div/>
+              }
 
             </GoogleMap>
             </div> :
