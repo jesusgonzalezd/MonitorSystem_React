@@ -3,18 +3,18 @@ import { BrowserRouter, Routes, Route, Switch } from 'react-router-dom';
 import {FiSettings} from 'react-icons/fi';
 import {TooltipComponent} from '@syncfusion/ej2-react-popups';
 
-import './App.css';
+import './SupervisorDashboard.css';
 
 
-import { Sidebar, ThemeSettings, Navbar } from './components';
+import { Sidebar, ThemeSettings, Navbar } from '../';
 
-import { Home, ColorPicker, Employees, Kanban, Editor, Tracking, Zonification, Calendar, Line, Pie } from './pages';
+import { Home, ColorPicker, Employees, Kanban, Editor, Tracking, Zonification, Calendar, Line, Pie } from '../../pages';
 
-import { useStateContext } from './context/ContextProvider';
+import { useStateContext } from '../../context/ContextProvider';
 
-import Selector from './components/selector/Selector';
+import Selector from '../selector/Selector';
 
-const App = () => {
+const SupervisorDashboard = () => {
 
   const { setCurrentColor, setCurrentMode, currentMode, activeMenu, currentColor, themeSettings, setThemeSettings } = useStateContext();
 
@@ -30,7 +30,7 @@ const App = () => {
 
   return (
     <div className={currentMode === 'Dark' ? 'dark' : ''}>
-      <BrowserRouter>
+        
         <div className="flex relative dark:bg-main-dark-bg">
           <div className="fixed right-4 bottom-4" style={{ zIndex: "1000" }}>
             {/* Componente Syncfution para configuración */}
@@ -71,44 +71,31 @@ const App = () => {
             <div>
               {/**Mostrar themeSettings si es verdad */}
               {themeSettings && (<ThemeSettings />)}
-
               <Routes>
                 {/* RUTA DASHBOARD */}
                 {/* home */}
-                <Route exact path = "/selector" element={<Selector/>}/>
-
                 <Route path="/supervisordashboard" element={<Home />} />
                 {/* home desde navbar */}
-                <Route path="/supervisordashboard/home" element={<Home />} />
+                <Route path="/home" element={<Home />} />
 
-                {/* pages  */}
-                <Route path="/orders" element="orders" />
-                <Route path="/supervisordashboard/empleados" element={<Employees />} />
-                <Route path="/customers" element="customer" />
-                <Route path="/tracking" element="Ecommerce" />
-                <Route exact path="/selector" component={Selector} />
-                {/* apps  */}
-                <Route path="/supervisordashboard/kanban" element={<Kanban />} />
-                <Route path="/supervisordashboard/editor" element={<Editor />} />
-                <Route path="/supervisordashboard/calendario" element={<Calendar />} />
-                <Route path="/supervisordashboard/color-picker" element={<ColorPicker />} />
+                <Route path="/empleados" element={<Employees />} />
 
-                {/* charts  */}
-                <Route path="/line" element={<Line />} />
-                <Route path="/area" element="Ecommerce" />
-                <Route path="/bar" element="Ecommerce" />
-                <Route path="/pie" element={<Pie />} />
-                <Route path="/financial" element="Ecommerce" />
-                <Route path="/color-mapping" element="Ecommerce" />
-                <Route path="/pyramid" element="Ecommerce" />
-                <Route path="/stacked" element="Ecommerce" />
-              </Routes>
+                <Route path="/kanban" element={<Kanban />} />
+                <Route path="/editor" element={<Editor />} />
+                <Route path="/calendario" element={<Calendar />} />
+                <Route path="/color-picker" element={<ColorPicker />} />
+
+               </Routes>
+              
+           
+                           
+
             </div>
           </div>
         </div>
-      </BrowserRouter>
+       
     </div>
   );
 };
 
-export default App
+export default SupervisorDashboard
