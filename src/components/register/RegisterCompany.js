@@ -341,4 +341,4 @@ const handleModifiedArea = (event) => {
     );
   }
 
-export default RegisterCompany;
+export default withRouter(RegisterCompany);

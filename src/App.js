@@ -8,7 +8,7 @@ import './App.css';
 
 import { Sidebar, ThemeSettings, Navbar } from './components';
 
-import { Home, ColorPicker, Employees, Kanban, Editor, Tracking, Zonification, Calendar, Line, Pie } from './pages';
+import { HomeDashboard, ColorPicker, Employees, Kanban, Editor, Tracking, Zonification, Calendar, Line, Pie } from './pages';
 
 import { useStateContext } from './context/ContextProvider';
 
@@ -72,28 +72,28 @@ const App = () => {
               {/**Mostrar themeSettings si es verdad */}
               {themeSettings && (<ThemeSettings />)}
 
-              <Routes>
-                {/* RUTA DASHBOARD */}
-                {/* home */}
+            {/*   
+            
+                <Routes>
+                
                 <Route exact path = "/selector" element={<Selector/>}/>
 
-                <Route path="/supervisordashboard" element={<Home />} />
-                {/* home desde navbar */}
-                <Route path="/supervisordashboard/home" element={<Home />} />
+                <Route path="/supervisordashboard" element={<HomeDashboard />} />
+               
+                <Route path="/supervisordashboard/homedashboard" element={<HomeDashboard />} />
 
-                {/* pages  */}
+              
                 <Route path="/orders" element="orders" />
                 <Route path="/supervisordashboard/empleados" element={<Employees />} />
                 <Route path="/customers" element="customer" />
                 <Route path="/tracking" element="Ecommerce" />
                 <Route exact path="/selector" component={Selector} />
-                {/* apps  */}
+                
                 <Route path="/supervisordashboard/kanban" element={<Kanban />} />
                 <Route path="/supervisordashboard/editor" element={<Editor />} />
                 <Route path="/supervisordashboard/calendario" element={<Calendar />} />
                 <Route path="/supervisordashboard/color-picker" element={<ColorPicker />} />
 
-                {/* charts  */}
                 <Route path="/line" element={<Line />} />
                 <Route path="/area" element="Ecommerce" />
                 <Route path="/bar" element="Ecommerce" />
@@ -102,7 +102,8 @@ const App = () => {
                 <Route path="/color-mapping" element="Ecommerce" />
                 <Route path="/pyramid" element="Ecommerce" />
                 <Route path="/stacked" element="Ecommerce" />
-              </Routes>
+              </Routes> 
+              */}
             </div>
           </div>
         </div>

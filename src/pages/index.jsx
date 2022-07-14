@@ -7,5 +7,5 @@ export { default as ColorMapping } from './Charts/ColorMapping';
 export { default as Line } from './Charts/Line';
 export { default as Pie } from './Charts/Pie';
 export { default as Employees } from './Employees';
-export { default as Home } from './Home';
+export { default as HomeDashboard } from './HomeDashboard';
 export { default as Editor } from './Editor';

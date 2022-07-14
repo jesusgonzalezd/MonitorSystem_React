@@ -1,6 +1,6 @@
 import React from 'react';
 import {Avatar, Button, Link, Paper, Box, Grid, Typography, CssBaseline, createTheme, ThemeProvider} from '@mui/material';
-import { Link as RouterLink} from 'react-router-dom';
+import { Link as RouterLink, withRouter} from 'react-router-dom';
 
 const AdminSelector = (props) => {
 
@@ -110,4 +110,4 @@ function Copyright() {
   );
 }
 
-export default AdminSelector;
+export default withRouter(AdminSelector);

@@ -3,10 +3,10 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter } from 'react-router-dom'
-import RouteComponent from './routes/RouteComponent';
+import Routes from './routes/Routes';
 
 
-import App from './App';
+//import App from './App';
 
 import {ContextProvider} from './context/ContextProvider';
 
@@ -22,7 +22,7 @@ import {ContextProvider} from './context/ContextProvider';
   <ContextProvider>
     <BrowserRouter>
     <div>
-        <RouteComponent />
+        <Routes />
     </div>
   </BrowserRouter>
  </ContextProvider>,

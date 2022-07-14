@@ -1,14 +1,15 @@
 import React, { useEffect } from 'react';
-import { BrowserRouter, Routes, Route, Switch } from 'react-router-dom';
+import { BrowserRouter, withRouter, Redirect, Route, Switch,  useParams, useRouteMatch } from 'react-router-dom';
 import {FiSettings} from 'react-icons/fi';
 import {TooltipComponent} from '@syncfusion/ej2-react-popups';
 
 import './SupervisorDashboard.css';
 
 
-import { Sidebar, ThemeSettings, Navbar } from '../';
 
-import { Home, ColorPicker, Employees, Kanban, Editor, Tracking, Zonification, Calendar, Line, Pie } from '../../pages';
+import { Sidebar, ThemeSettings, Navbar } from '..';
+
+import { HomeDashboard, ColorPicker, Employees, Kanban, Editor, Calendar, Tracking, Zonification,  Line, Pie } from '../../pages';
 
 import { useStateContext } from '../../context/ContextProvider';
 
@@ -18,6 +19,11 @@ const SupervisorDashboard = () => {
 
   const { setCurrentColor, setCurrentMode, currentMode, activeMenu, currentColor, themeSettings, setThemeSettings } = useStateContext();
 
+
+  let { path, url } = useRouteMatch();
+
+
+  console.log(path);
 
   useEffect(() => {
     const currentThemeColor = localStorage.getItem('colorMode');
@@ -71,25 +77,56 @@ const SupervisorDashboard = () => {
             <div>
               {/**Mostrar themeSettings si es verdad */}
               {themeSettings && (<ThemeSettings />)}
-              <Routes>
-                {/* RUTA DASHBOARD */}
-                {/* home */}
-                <Route path="/supervisordashboard" element={<Home />} />
-                {/* home desde navbar */}
-                <Route path="/home" element={<Home />} />
 
-                <Route path="/empleados" element={<Employees />} />
+                                        
+              <Switch>
+                    
+                    {/* HOME */}
+                   {/*  <Route path={ `${path}/`}>
+                      <HomeDashboard/> 
+                    </Route> */} 
 
-                <Route path="/kanban" element={<Kanban />} />
-                <Route path="/editor" element={<Editor />} />
-                <Route path="/calendario" element={<Calendar />} />
-                <Route path="/color-picker" element={<ColorPicker />} />
+                    <Route path={ `${path}/Home`}>
+                      <HomeDashboard/> 
+                    </Route> 
+                
+                    {/**Servicios */}
+                    <Route path="/tracking" element="Tracking" />
+                    
 
-               </Routes>
+                    <Route path={ `${path}/empleados`}>
+                      <Employees/> 
+                    </Route> 
+
+                    {/**App */}
+
+                    <Route path={ `${path}/calendario`}>
+                      <Calendar/> 
+                    </Route> 
+
+                    <Route path={ `${path}/kanban`}>
+                      <Kanban/> 
+                    </Route>                 
+                    
+                    <Route path={ `${path}/editor`}>
+                      <Editor/> 
+                    </Route>                 
+            
+                    <Route path={ `${path}/color-picker`}>
+                      <ColorPicker/> 
+                    </Route>
+                    
+
+                    {/* Registro  */}
+                    
+                    <Route path="/line" component="line" />                
+                    <Route path="/area" component="area" />
+        
+
+
+              </Switch>
               
            
-                           
-
             </div>
           </div>
         </div>
@@ -98,4 +135,4 @@ const SupervisorDashboard = () => {
   );
 };
 
-export default SupervisorDashboard
+export default withRouter (SupervisorDashboard);

@@ -1,11 +1,13 @@
-import React, { useEffect } from 'react';
+import React, {useState, useEffect } from 'react';
+import { Link, withRouter } from 'react-router-dom';
 import { AiOutlineMenu } from 'react-icons/ai';
 import { FiShoppingCart } from 'react-icons/fi';
 import { BsChatLeft } from 'react-icons/bs';
 import { RiNotification3Line } from 'react-icons/ri';
 import { MdKeyboardArrowDown } from 'react-icons/md';
 import { TooltipComponent } from '@syncfusion/ej2-react-popups';
- 
+import axios from 'axios'; 
+
 import avatar from '../../data/avatar.jpg';
 import { useStateContext } from '../../context/ContextProvider';
 import  UserProfile  from '../userprofile/UserProfile';
@@ -29,9 +31,47 @@ const NavButton = ({ title, customFunc, icon, color, dotColor }) => (
 );
 
 
-const Navbar = () => {
+const Navbar = (props) => {
 
   const { currentColor, activeMenu, setActiveMenu, handleClick, isClicked, setScreenSize, screenSize } = useStateContext();
+
+  // Usuario logueado en sistema.
+  const[userin, setUserin] = useState({
+    id: '',
+    firstname: '',
+    lastname: '',
+    username: '',
+    email: '',
+    department: '',
+    avatar: '',
+    role: ''
+  });
+
+  
+  useEffect(() => {
+
+    axios.get("https://localhost:44322/api/auth/obtainuserrole/" + props.username)
+      .then((response  => {
+        console.log(response.data);
+        console.log("Entro");
+
+        setUserin({
+          id: response.data.user.id,
+          firstname: response.data.user.firstName,
+          lastname: response.data.user.lastName,
+          username: response.data.user.userName,
+          email: response.data.user.email,
+          department: response.data.user.department,
+          avatar: response.data.user.avatar,
+          role: response.data.role,
+        });
+      }))
+      .catch(function (response) {
+        console.log(response);
+      });
+
+  }, [props.username]);
+
 
   useEffect(() => {
     const handleResize = () => setScreenSize(window.innerWidth);
@@ -53,6 +93,23 @@ const Navbar = () => {
 
   const handleActiveMenu = () => setActiveMenu(!activeMenu);
 
+  const handleLogout = () => {
+
+    axios({
+      method: "post",
+      url: "https://localhost:44322/api/auth/logout",
+      headers: { "Content-Type": "multipart/form-data" },
+    })
+      .then(function (response) {
+        console.log(response);
+        props.history.push('/');
+      })
+      .catch(function (response) {
+        console.log(response);
+      });
+  };
+
+  console.log(userin);
 
   return (
     <div className='flex justify-between p-2 md:mx-6 relative'>
@@ -70,13 +127,12 @@ const Navbar = () => {
           >
             <img
               className="rounded-full w-8 h-8"
-               src={avatar}
-              alt="user-profile"
+              alt={userin.firstname + " " + userin.lastname} src=""
             />
             <p>
               <span className="text-gray-400 text-14">Hi,</span>{' '}
               <span className="text-gray-400 font-bold ml-1 text-14">
-                Michael
+                {userin.firstname}
               </span>
             </p>
             <MdKeyboardArrowDown className="text-gray-400 text-14" />

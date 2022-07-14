@@ -12,7 +12,7 @@ import { useStateContext } from '../context/ContextProvider';
 import product9 from '../data/product9.jpg';
 
 
-const Home = () => {
+const HomeDashboard = () => {
 
   const { currentColor, currentMode } = useStateContext();
 
@@ -151,4 +151,4 @@ const Home = () => {
   )
 }
 
-export default Home
+export default HomeDashboard

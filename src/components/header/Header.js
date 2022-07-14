@@ -1,6 +1,6 @@
 import React , {useState, useEffect} from 'react';
 import {AppBar, Box, Toolbar, IconButton, Typography, Container, Avatar, Button, Tooltip, Menu, MenuItem, Badge, ThemeProvider, createTheme, styled} from '@mui/material';
-import {DragHandle, AccountBox, Face, PhotoCamera, Logout, Map, ListAlt, ShareLocation, Home, Hail} from '@mui/icons-material';
+import {DragHandle, AccountBox, Face, PhotoCamera, Logout, Map, ListAlt, ShareLocation, Home, Hail, Business} from '@mui/icons-material';
 import axios from 'axios';
 import { Link, withRouter } from 'react-router-dom';
 
@@ -73,29 +73,35 @@ const Header = (props) => {
     role: ''
   });
 
+  // Empresa a la cual el usuario logueado trabaja.
+  const[namecompany, setNameCompany] = useState();
+
   useEffect(() => {
-
         axios.get("https://localhost:44322/api/auth/obtainuserrole/" + props.username)
-          .then((response  => {
-            console.log(response.data);
-            console.log("Entro");
+              .then((response  => {
+                setUserin({
+                  id: response.data.user.id,
+                  firstname: response.data.user.firstName,
+                  lastname: response.data.user.lastName,
+                  username: response.data.user.userName,
+                  email: response.data.user.email,
+                  department: response.data.user.department,
+                  avatar: response.data.user.avatar,
+                  role: response.data.role,
+                });
+              }))
+              .catch(function (response) {
+                console.log(response);
+              });
 
-            setUserin({
-              id: response.data.user.id,
-              firstname: response.data.user.firstName,
-              lastname: response.data.user.lastName,
-              username: response.data.user.userName,
-              email: response.data.user.email,
-              department: response.data.user.department,
-              avatar: response.data.user.avatar,
-              role: response.data.role,
-            });
-          }))
-          .catch(function (response) {
-            console.log(response);
-          });
-
-  }, [props.username]);
+        axios.get("https://localhost:44322/api/company/ObtainNameCompanyEmployee/" + props.username)
+             .then((response  => {
+                  setNameCompany(response.data.nameCompany);
+              }))
+              .catch(function (response) {
+                console.log(response);
+              });
+}, [props.username]);
 
   const handleLogout = () => {
 
@@ -112,8 +118,6 @@ const Header = (props) => {
         console.log(response);
       });
   };
-
-  console.log(userin);
 
   return (
   <ThemeProvider theme={darkTheme}>
@@ -159,6 +163,9 @@ const Header = (props) => {
                 display: { xs: 'block', md: 'none' },
               }}
             >
+              <MenuItem disabled><Business/>{namecompany}</MenuItem>
+              <MenuItem disabled><Face/>{userin.firstname + " " + userin.lastname}</MenuItem>
+              <MenuItem disabled><Hail/>{userin.role}</MenuItem>
               <MenuItem
                 to={{
                   pathname: '/home',
@@ -214,6 +221,10 @@ const Header = (props) => {
               ><ShareLocation/>
                 Ubicaciones
               </Button>
+
+              <MenuItem disabled><Business/>{namecompany}</MenuItem>
+              <MenuItem disabled><Face/>{userin.firstname + " " + userin.lastname}</MenuItem>
+              <MenuItem disabled><Hail/>{userin.role}</MenuItem>
           </Box>
 
           <Box sx={{ flexGrow: 0 }}>
@@ -244,8 +255,6 @@ const Header = (props) => {
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
             >
-              <MenuItem disabled><Face/>{userin.firstname + " " + userin.lastname}</MenuItem>
-              <MenuItem disabled><Hail/>{userin.role}</MenuItem>
               <MenuItem><AccountBox/>
                 <Typography textAlign="right">Perfil</Typography>
               </MenuItem>
@@ -263,4 +272,4 @@ const Header = (props) => {
   </ThemeProvider>
   );
 };
-export default Header;
+export default withRouter(Header);

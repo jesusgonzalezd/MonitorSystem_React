@@ -21,3 +21,5 @@ export { default as Signup } from './signup/Signup';
 export { default as Zonification } from './zonification/Zonification';
 export { default as Tracking } from './tracking/Tracking';
 export { default as Button } from './button/Button';
+
+export { default as Home } from './home/Home';

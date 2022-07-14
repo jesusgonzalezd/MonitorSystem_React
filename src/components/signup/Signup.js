@@ -491,4 +491,4 @@ const handleModifiedRoles = (event) => {
     );
   }
 
-export default Signup;
+export default withRouter(Signup);

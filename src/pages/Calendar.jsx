@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { ScheduleComponent, ViewsDirective, ViewDirective, Day, Week, WorkWeek, Month, Agenda, Inject, Resize, DragAndDrop } from '@syncfusion/ej2-react-schedule';
 import { DatePickerComponent } from '@syncfusion/ej2-react-calendars';
-
+import { withRouter, Redirect} from 'react-router-dom';
 
 import { scheduleData } from '../data/dummy';
 import { HeaderTable } from '../components';
@@ -63,4 +63,4 @@ const Calendar = () => {
   )
 }
 
-export default Calendar
+export default Calendar;
