@@ -5,7 +5,7 @@ import AvatarEdit from 'react-avatar-edit';
 import axios from 'axios';
 import Snackbar from '../snackbar/Snackbar';
 
-const RegisterCompany = (props) => {
+const CompanyRegister = (props) => {
 
   const darkTheme = createTheme({
     palette: {
@@ -341,4 +341,4 @@ const handleModifiedArea = (event) => {
     );
   }
 
-export default withRouter(RegisterCompany);
+export default withRouter(CompanyRegister);

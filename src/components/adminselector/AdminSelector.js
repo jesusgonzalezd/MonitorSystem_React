@@ -2,7 +2,7 @@ import React from 'react';
 import {Avatar, Button, Link, Paper, Box, Grid, Typography, CssBaseline, createTheme, ThemeProvider} from '@mui/material';
 import { Link as RouterLink, withRouter} from 'react-router-dom';
 
-const AdminSelector = (props) => {
+const AdminSelector = () => {
 
 const darkTheme = createTheme({
   palette: {
@@ -50,7 +50,7 @@ const darkTheme = createTheme({
             <Box component="form" sx={{ mt: 1 }}>
               
               <Button
-                to="/registercompany" component={React.forwardRef((props, ref) => <RouterLink innerRef={ref} {...props} />)} variant="contained"
+                to="/companyregister" component={React.forwardRef((props, ref) => <RouterLink innerRef={ref} {...props} />)} variant="contained"
                 type="submit"
                 fullWidth
                 sx={{ mt: 3, mb: 2 }}
@@ -58,28 +58,12 @@ const darkTheme = createTheme({
                 Registro de Empresa
               </Button>
               <Button
-                to="/registerrole" component={React.forwardRef((props, ref) => <RouterLink innerRef={ref} {...props} />)} variant="contained"
+                to="/roleregister" component={React.forwardRef((props, ref) => <RouterLink innerRef={ref} {...props} />)} variant="contained"
                 type="submit"
                 fullWidth
                 sx={{ mt: 3, mb: 2 }}
               >
                 Registro de Role
-              </Button>
-              <Button
-                to="/registerarea" component={React.forwardRef((props, ref) => <RouterLink innerRef={ref} {...props} />)} variant="contained"
-                type="submit"
-                fullWidth
-                sx={{ mt: 3, mb: 2 }}
-              >
-                Registro de Area
-              </Button>
-              <Button
-                to="/registerdepartment" component={React.forwardRef((props, ref) => <RouterLink innerRef={ref} {...props} />)} variant="contained"
-                type="submit"
-                fullWidth
-                sx={{ mt: 3, mb: 2 }}
-              >
-                Registro de Departamento
               </Button>
               <Grid container alignItems="center" justifyContent="center">
                 <Grid item>
