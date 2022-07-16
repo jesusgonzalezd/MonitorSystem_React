@@ -173,14 +173,19 @@ const Header = (props) => {
                 }}
                 component={React.forwardRef((props, ref) => <Link innerRef={ref} {...props} />)}
               ><Home/>Inicio</MenuItem>
-              <MenuItem
-                to={{
-                  pathname: '/zonification',
-                  state: { username: userin.username }
-                }}
-                component={React.forwardRef((props, ref) => <Link innerRef={ref} {...props} />)} 
-              ><Map/>Zonificacion
-              </MenuItem>
+              {userin.role === "Supervisor"?
+                <div>
+                  <MenuItem
+                    to={{
+                      pathname: '/zonification',
+                      state: { username: userin.username }
+                    }}
+                    component={React.forwardRef((props, ref) => <Link innerRef={ref} {...props} />)} 
+                  ><Map/>Zonificacion
+                  </MenuItem>
+                  </div>
+                  : <div/>
+              }
               <MenuItem><ListAlt/>Reportes</MenuItem>
               <MenuItem><ShareLocation/>Ubicaciones</MenuItem>
             </Menu>
@@ -198,17 +203,21 @@ const Header = (props) => {
               ><Home/>
                 Inicio
               </Button>
-              <Button 
-                to={{
-                  pathname: '/zonification',
-                  state: { username: userin.username }
-              }} 
-                component={React.forwardRef((props, ref) => <Link innerRef={ref} {...props} />)}
-                onClick={handleCloseNavMenu}
-                sx={{ my: 2, color: 'white', display: 'block' }}
-              ><Map/>
-                Zonificacion
-              </Button>
+              {userin.role === "Supervisor"?
+                <div>
+                  <Button 
+                    to={{
+                      pathname: '/zonification',
+                      state: { username: userin.username }
+                  }} 
+                    component={React.forwardRef((props, ref) => <Link innerRef={ref} {...props} />)}
+                    onClick={handleCloseNavMenu}
+                    sx={{ my: 2, color: 'white', display: 'block' }}
+                  ><Map/>
+                    Zonificacion
+                  </Button>
+              </div> : <div/>
+              }
               <Button
                 onClick={handleCloseNavMenu}
                 sx={{ my: 2, color: 'white', display: 'block' }}
