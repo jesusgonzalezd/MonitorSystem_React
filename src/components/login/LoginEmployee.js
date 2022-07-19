@@ -3,8 +3,11 @@ import axios from 'axios';
 import {Avatar, Button, TextField, FormControlLabel, Checkbox, Link, Paper, Box, Grid, Typography, CssBaseline, createTheme, ThemeProvider} from '@mui/material';
 import { Link as RouterLink, withRouter, Redirect} from 'react-router-dom';
 import Snackbar from '../snackbar/Snackbar';
+import { useStateContext } from '../../context/ContextProvider';
 
 const LoginEmployee = (props) => {
+
+const { setUserCurrent, currentUser } = useStateContext();
 
 const darkTheme = createTheme({
   palette: {
@@ -54,6 +57,8 @@ const [user, setUser] = useState({
     ...user,
     [e.target.name]: e.target.value
   });
+
+  
 };
 
 useEffect(() => {
@@ -80,6 +85,7 @@ const peticionPost = (username, password) => {
         motive: 'success', text: response.data.message, appear: true,
       });
       setLogin(true);
+      
     })
     .catch(function (error) {
       setsnack({
@@ -160,7 +166,7 @@ const handleSubmit = (event) => {
                 type="submit"
                 fullWidth
                 variant="contained"
-                sx={{ mt: 3, mb: 2 }}
+                sx={{ mt: 3, mb: 2 }}           
               >
                 Acceder
               </Button>
@@ -177,7 +183,7 @@ const handleSubmit = (event) => {
               {login? (
                           <Redirect
                             to={{
-                                pathname: '/home',
+                                pathname: '/supervisordashboard',
                                 state: { username: user.username }
                             }}
                           />

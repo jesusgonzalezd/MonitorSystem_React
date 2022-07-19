@@ -13,7 +13,8 @@ export const ContextProvider = ({ children }) => {
     const [themeSettings, setThemeSettings] = useState(false); /**Está abierto o no */
     const [activeMenu, setActiveMenu] = useState(true);
     const [isClicked, setIsClicked] = useState(initialState);
-  
+    const [currentUser, setCurrentUser] = useState(undefined);
+
     const setMode = (e) => {
       setCurrentMode(e.target.value);
       localStorage.setItem('themeMode', e.target.value);
@@ -23,18 +24,25 @@ export const ContextProvider = ({ children }) => {
         setCurrentColor(color);
         localStorage.setItem('colorMode', color);
       };
+
+    const setUserCurrent = (user) =>{
+      setCurrentUser(user);
+      localStorage.setItem('userCurrent', user);
+    }
     
-      {/** función que se encarga de redireccionar los click. Se cambia el valor de lo clickeado a true */}
-      const handleClick = (clicked) => setIsClicked({ ...initialState, [clicked]: true });
     
-      return (
+    {/** función que se encarga de redireccionar los click. Se cambia el valor de lo clickeado a true */}
+    const handleClick = (clicked) => setIsClicked({ ...initialState, [clicked]: true });
+    
+    return (
         // eslint-disable-next-line react/jsx-no-constructed-context-values
         <StateContext.Provider 
         value={{ 
           currentColor, 
           currentMode, 
           activeMenu, 
-          screenSize, 
+          screenSize,
+          currentUser, 
           setScreenSize, 
           handleClick, 
           isClicked, 
@@ -43,8 +51,10 @@ export const ContextProvider = ({ children }) => {
           setActiveMenu, 
           setCurrentColor, 
           setCurrentMode, 
+          setCurrentUser,
           setMode, 
-          setColor, 
+          setColor,
+          setUserCurrent, 
           themeSettings, 
           setThemeSettings }}>
           {/* Se traen todos los children para poder mostrar todos los componentes al cargar el context */}

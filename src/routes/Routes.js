@@ -33,7 +33,6 @@ const Routes = () =>(
       <Route exact path = "/adminselector" component={AdminSelector}/>
       <Route path = "/supervisordashboard" component={SupervisorDashboard } /> 
       
-      {/* <Route exact path = "/home" element={(<Home/>)} />  */}
       <Route exact path = "/" component={Selector}/> 
       <Route exact path = "/selector" component={Selector}/>
 

@@ -5,8 +5,6 @@ import {TooltipComponent} from '@syncfusion/ej2-react-popups';
 
 import './SupervisorDashboard.css';
 
-
-
 import { Sidebar, ThemeSettings, Navbar } from '..';
 
 import { HomeDashboard, ColorPicker, Employees, Kanban, Editor, Calendar, Tracking, Zonification,  Line, Pie } from '../../pages';
@@ -15,24 +13,29 @@ import { useStateContext } from '../../context/ContextProvider';
 
 import Selector from '../selector/Selector';
 
-const SupervisorDashboard = () => {
+const SupervisorDashboard = (props) => {
 
-  const { setCurrentColor, setCurrentMode, currentMode, activeMenu, currentColor, themeSettings, setThemeSettings } = useStateContext();
-
+  const { setCurrentColor, setCurrentMode, currentMode, currentUser, setUserCurrent, activeMenu, currentColor, themeSettings, setThemeSettings } = useStateContext();
 
   let { path, url } = useRouteMatch();
 
-
-  console.log(path);
-
+  
   useEffect(() => {
     const currentThemeColor = localStorage.getItem('colorMode');
     const currentThemeMode = localStorage.getItem('themeMode');
+    const currentUser = localStorage.getItem('username');
+
+    console.log("EEEH ACÁ "+ currentUser) //Acá estás null, chú. 
+   
+
     if (currentThemeColor && currentThemeMode) {
       setCurrentColor(currentThemeColor);
       setCurrentMode(currentThemeMode);
+      setUserCurrent(currentUser);
     }
   }, []);
+
+
 
   return (
     <div className={currentMode === 'Dark' ? 'dark' : ''}>
@@ -70,7 +73,7 @@ const SupervisorDashboard = () => {
             }
           >
             <div className="fixed md:static bg-main-bg dark:bg-main-dark-bg navbar w-full ">
-              <Navbar />
+              <Navbar username={localStorage.getItem('username')} />
             </div>
 
             {/* Div for Routes */}

@@ -47,6 +47,8 @@ const Navbar = (props) => {
     role: ''
   });
 
+  // Empresa a la cual el usuario logueado trabaja.
+  const[namecompany, setNameCompany] = useState();
   
   useEffect(() => {
 
@@ -54,6 +56,9 @@ const Navbar = (props) => {
       .then((response  => {
         console.log(response.data);
         console.log("Entro");
+
+        localStorage.setItem('username', response.data.user.userName);
+        console.log(" a ver "+ response.data.user.userName)
 
         setUserin({
           id: response.data.user.id,
@@ -64,11 +69,20 @@ const Navbar = (props) => {
           department: response.data.user.department,
           avatar: response.data.user.avatar,
           role: response.data.role,
-        });
+        });       
+        
       }))
       .catch(function (response) {
         console.log(response);
       });
+
+    axios.get("https://localhost:44322/api/company/ObtainNameCompanyEmployee/" + props.username)
+      .then((response  => {
+           setNameCompany(response.data.nameCompany);
+       }))
+       .catch(function (response) {
+         console.log(response);
+       });
 
   }, [props.username]);
 

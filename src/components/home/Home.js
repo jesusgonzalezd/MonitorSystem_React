@@ -7,6 +7,7 @@ import axios from 'axios';
 
 const Home = (props) =>{
 
+ 
   const [location, setLocation] = useState();
 
   // Contenido del Snackbar.
