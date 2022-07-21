@@ -1,7 +1,7 @@
 import React, {useState, useEffect } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import { AiOutlineMenu } from 'react-icons/ai';
-import { FiShoppingCart } from 'react-icons/fi';
+import { FiLogOut } from 'react-icons/fi';
 import { BsChatLeft } from 'react-icons/bs';
 import { RiNotification3Line } from 'react-icons/ri';
 import { MdKeyboardArrowDown } from 'react-icons/md';
@@ -52,14 +52,8 @@ const Navbar = (props) => {
   
   useEffect(() => {
 
-    axios.get("https://localhost:44322/api/auth/obtainuserrole/" + props.username)
-      .then((response  => {
-        console.log(response.data);
-        console.log("Entro");
-
-        localStorage.setItem('username', response.data.user.userName);
-        console.log(" a ver "+ response.data.user.userName)
-
+    axios.get("https://localhost:44322/api/auth/obtainuserrole/" + localStorage.getItem('username'))
+      .then((response  => {                                   
         setUserin({
           id: response.data.user.id,
           firstname: response.data.user.firstName,
@@ -69,14 +63,16 @@ const Navbar = (props) => {
           department: response.data.user.department,
           avatar: response.data.user.avatar,
           role: response.data.role,
-        });       
-        
+        });      
+         
+        /* localStorage.setItem('username', response.data.user.userName); */
+        localStorage.setItem('userdata', JSON.stringify(userin));
       }))
       .catch(function (response) {
         console.log(response);
       });
 
-    axios.get("https://localhost:44322/api/company/ObtainNameCompanyEmployee/" + props.username)
+    axios.get("https://localhost:44322/api/company/ObtainNameCompanyEmployee/" + localStorage.getItem('username'))
       .then((response  => {
            setNameCompany(response.data.nameCompany);
        }))
@@ -109,6 +105,8 @@ const Navbar = (props) => {
 
   const handleLogout = () => {
 
+    localStorage.clear();
+
     axios({
       method: "post",
       url: "https://localhost:44322/api/auth/logout",
@@ -125,6 +123,8 @@ const Navbar = (props) => {
 
   console.log(userin);
 
+  
+
   return (
     <div className='flex justify-between p-2 md:mx-6 relative'>
       <NavButton title="Menu" 
@@ -134,6 +134,8 @@ const Navbar = (props) => {
 
        {/* Acá se pueden colocar otros botones  */}
       <div className='flex'>
+
+     
       <TooltipComponent content="Profile" position="BottomCenter">
           <div
             className="flex items-center gap-2 cursor-pointer p-1 hover:bg-light-gray rounded-lg"
@@ -156,9 +158,11 @@ const Navbar = (props) => {
         {/** Se abre la ventana del UserProfile. Si le da click se renderiza el componente */}
         {isClicked.userProfile && (<UserProfile />)}
 
+        <NavButton title="LogOut" customFunc={handleLogout} color={currentColor} icon={<FiLogOut />} />
+
       </div>
     </div>
   )
 }
 
-export default Navbar
+export default withRouter(Navbar)

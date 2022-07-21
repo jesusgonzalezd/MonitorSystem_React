@@ -29,6 +29,9 @@ const Tracking = (props) => {
     const [, setError] = useState();
     const [role, setRole] = useState();
   
+    let details = JSON.parse(localStorage.getItem('userdata'));
+
+    console.log(details.firstname);
 
     useEffect(() => {
 

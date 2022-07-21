@@ -19,6 +19,8 @@ const SupervisorDashboard = (props) => {
 
   let { path, url } = useRouteMatch();
 
+  let details = JSON.parse(localStorage.getItem('userdata'));
+
   /* const location = useLocation();
   const state = props.location.state.username;
   console.log("veamos state"+state); */
@@ -26,11 +28,7 @@ const SupervisorDashboard = (props) => {
   useEffect(() => {
     const currentThemeColor = localStorage.getItem('colorMode');
     const currentThemeMode = localStorage.getItem('themeMode');
-    const currentUser = localStorage.getItem('username');
-
-    console.log("EEEH ACÁ "+ currentUser) //Acá estás null, chú. 
-   
-
+    
     if (currentThemeColor && currentThemeMode) {
       setCurrentColor(currentThemeColor);
       setCurrentMode(currentThemeMode);
