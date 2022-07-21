@@ -64,9 +64,10 @@ const Navbar = (props) => {
           avatar: response.data.user.avatar,
           role: response.data.role,
         });      
-         
+
+        /*Se guarda el user y sus datos en LocalStorage */         
         /* localStorage.setItem('username', response.data.user.userName); */
-        localStorage.setItem('userdata', JSON.stringify(userin));
+        localStorage.setItem('userdata', JSON.stringify(response.data.user));
       }))
       .catch(function (response) {
         console.log(response);

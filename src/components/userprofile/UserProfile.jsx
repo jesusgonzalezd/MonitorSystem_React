@@ -14,7 +14,7 @@ const UserProfile = (props) => {
   
   let details = JSON.parse(localStorage.getItem('userdata'));
 
-  console.log(details)
+  console.log(details.firstName)
 
   const handleLogout = () => {
 
@@ -55,9 +55,9 @@ const UserProfile = (props) => {
           alt="user-profile"
         />
         <div>
-          <p className="font-semibold text-xl dark:text-gray-200"> {localStorage.getItem('username')} </p>
-          <p className="text-gray-500 text-sm dark:text-gray-400">  Administrator   </p>
-          <p className="text-gray-500 text-sm font-semibold dark:text-gray-400"> info@shop.com </p>
+          <p className="font-semibold text-xl dark:text-gray-200"> {details.firstName}{' '}{details.lastName}</p>
+          <p className="text-gray-500 text-sm dark:text-gray-400">  {details.department}   </p>
+          <p className="text-gray-500 text-sm font-semibold dark:text-gray-400"> {details.email} </p>
         </div>
       </div>
       <div>
