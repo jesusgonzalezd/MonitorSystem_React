@@ -3,11 +3,9 @@ import axios from 'axios';
 import {Avatar, Button, TextField, FormControlLabel, Checkbox, Link, Paper, Box, Grid, Typography, CssBaseline, createTheme, ThemeProvider} from '@mui/material';
 import { Link as RouterLink, withRouter, Redirect} from 'react-router-dom';
 import Snackbar from '../snackbar/Snackbar';
-import { useStateContext } from '../../context/ContextProvider';
 
 const LoginEmployee = (props) => {
 
-const { setUserCurrent, currentUser } = useStateContext();
 
 const darkTheme = createTheme({
   palette: {
@@ -183,7 +181,7 @@ const handleSubmit = (event) => {
               {login? (
                           <Redirect
                             to={{
-                                pathname: '/supervisordashboard',
+                                pathname: '/home',
                                 state: { username: user.username }
                             }}
                           />

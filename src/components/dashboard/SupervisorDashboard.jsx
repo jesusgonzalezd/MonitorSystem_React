@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { BrowserRouter, withRouter, Redirect, Route, Switch,  useParams, useRouteMatch } from 'react-router-dom';
+import { BrowserRouter, withRouter, Redirect, Route, Switch,  useParams, useLocation, useRouteMatch } from 'react-router-dom';
 import {FiSettings} from 'react-icons/fi';
 import {TooltipComponent} from '@syncfusion/ej2-react-popups';
 
@@ -19,6 +19,9 @@ const SupervisorDashboard = (props) => {
 
   let { path, url } = useRouteMatch();
 
+  /* const location = useLocation();
+  const state = props.location.state.username;
+  console.log("veamos state"+state); */
   
   useEffect(() => {
     const currentThemeColor = localStorage.getItem('colorMode');
@@ -35,8 +38,7 @@ const SupervisorDashboard = (props) => {
     }
   }, []);
 
-
-
+  
   return (
     <div className={currentMode === 'Dark' ? 'dark' : ''}>
         
@@ -94,8 +96,9 @@ const SupervisorDashboard = (props) => {
                     </Route> 
                 
                     {/**Servicios */}
-                    <Route path="/tracking" element="Tracking" />
-                    
+                    <Route path={ `${path}/tracking`} >
+                      <Tracking /> 
+                    </Route>                  
 
                     <Route path={ `${path}/empleados`}>
                       <Employees/> 

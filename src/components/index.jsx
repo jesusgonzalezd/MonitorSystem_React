@@ -19,7 +19,7 @@ export { default as RegisterCompany } from './register/RegisterCompany';
 export { default as Selector } from './selector/Selector';
 export { default as Signup } from './signup/Signup';
 export { default as Zonification } from './zonification/Zonification';
-export { default as Tracking } from './tracking/Tracking';
+export { default as TrackingComponent } from './tracking/TrackingComponent';
 export { default as Button } from './button/Button';
 
 export { default as Home } from './home/Home';

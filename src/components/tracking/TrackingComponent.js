@@ -5,7 +5,7 @@ import { withRouter, Redirect} from 'react-router-dom';
 import Snackbar from '../snackbar/Snackbar';
 import axios from 'axios';
 
-const Tracking = (props) =>{
+const TrackingComponent = (props) =>{
 
   const [location, setLocation] = useState();
 
@@ -193,4 +193,4 @@ return isLoaded ?(
 ) : <></>
 }
 
-export default withRouter(Tracking);
+export default withRouter(TrackingComponent);

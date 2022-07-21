@@ -177,7 +177,7 @@ const handleSubmit = (event) => {
               {login? (
                           <Redirect
                             to={{
-                                pathname: '/home',
+                                pathname: '/supervisordashboard/Home',
                                 state: { username: user.username }
                             }}
                           />

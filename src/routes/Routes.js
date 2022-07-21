@@ -11,15 +11,8 @@ import RegisterCompany from '../components/register/RegisterCompany';
 import AdminSelector from '../components/adminselector/AdminSelector';
 import SupervisorDashboard from '../components/dashboard/SupervisorDashboard';
 
-import Tracking from '../components/tracking/Tracking';
-
-import { Calendar } from '../pages';
-
 import Home from '../components/home/Home';
 
-import { Sidebar, ThemeSettings, Navbar } from '../components';
-
-import { ColorPicker, Employees, Kanban, Editor,  Line, Pie } from '../pages';
 
 // Componente Funcional Routes.
 const Routes = () =>(
@@ -35,10 +28,6 @@ const Routes = () =>(
       
       <Route exact path = "/" component={Selector}/> 
       <Route exact path = "/selector" component={Selector}/>
-
-      <Route exact path = "/tracking" component={Tracking}/>
-
-      
 
       <Route exact path = "/home" component={Home} />
 

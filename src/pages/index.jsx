@@ -9,3 +9,4 @@ export { default as Pie } from './Charts/Pie';
 export { default as Employees } from './Employees';
 export { default as HomeDashboard } from './HomeDashboard';
 export { default as Editor } from './Editor';
+export { default as Tracking } from './Tracking';
