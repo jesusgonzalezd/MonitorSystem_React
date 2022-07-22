@@ -2,7 +2,7 @@ import React from 'react';
 import {Route, Switch} from 'react-router-dom';
 import LoginEmployee from '../components/login/LoginEmployee';
 import Signup from '../components/signup/Signup';
-import Zonification from '../components/zonification/Zonification';
+import Zonification from '../components/zonification/ZonificationComponent';
 import LoginMonitor from '../components/login/LoginMonitor';
 import LoginSupervisor from '../components/login/LoginSupervisor';
 import Selector from '../components/selector/Selector';
