@@ -6,6 +6,7 @@ import Snackbar from '../snackbar/Snackbar';
 
 const LoginEmployee = (props) => {
 
+
 const darkTheme = createTheme({
   palette: {
     mode: 'dark',
@@ -54,6 +55,8 @@ const [user, setUser] = useState({
     ...user,
     [e.target.name]: e.target.value
   });
+
+  
 };
 
 useEffect(() => {
@@ -80,6 +83,7 @@ const peticionPost = (username, password) => {
         motive: 'success', text: response.data.message, appear: true,
       });
       setLogin(true);
+      
     })
     .catch(function (error) {
       setsnack({
@@ -160,7 +164,7 @@ const handleSubmit = (event) => {
                 type="submit"
                 fullWidth
                 variant="contained"
-                sx={{ mt: 3, mb: 2 }}
+                sx={{ mt: 3, mb: 2 }}           
               >
                 Acceder
               </Button>

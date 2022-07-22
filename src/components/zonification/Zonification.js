@@ -264,4 +264,4 @@ return isLoaded ?(
 ) : <></>
 }
 
-export default withRouter(Zonification);
+export default Zonification;

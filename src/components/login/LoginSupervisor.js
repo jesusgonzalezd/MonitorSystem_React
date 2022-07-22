@@ -175,9 +175,10 @@ const handleSubmit = (event) => {
 
               <div>
               {login? (
+                          localStorage.setItem('username', user.username),
                           <Redirect
                             to={{
-                                pathname: '/home',
+                                pathname: '/supervisordashboard/Home',
                                 state: { username: user.username }
                             }}
                           />
