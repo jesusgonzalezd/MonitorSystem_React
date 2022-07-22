@@ -7,7 +7,6 @@ import axios from 'axios';
 
 const Home = (props) =>{
 
- 
   const [location, setLocation] = useState();
 
   // Contenido del Snackbar.
@@ -49,7 +48,6 @@ const Home = (props) =>{
               if(role === 'Monitor'){
                     axios.get("https://localhost:44322/api/location/GetAllEmployeesLastLocation/" + idCompany)
                     .then((response  => {
-                        console.log("Prueba");
                         setmarkerEmployees(response.data);
                     }))
                     .catch(function (response) {
@@ -154,7 +152,7 @@ return isLoaded ?(
                   center = {center}
                   onClick={coord => onMapClicked(coord)}
               >
-                {markerEmployees.map(({ idLocation, firstName, latitude, longitude }) => (
+                {markerEmployees.map(({ idLocation, employee, latitude, longitude }) => (
                   <Marker
                     key={idLocation}
                     position={{lat: latitude, lng: longitude}}
@@ -163,7 +161,7 @@ return isLoaded ?(
                   >
                     {activeMarker === idLocation ? (
                       <InfoWindow onCloseClick={() => setActiveMarker(null)}>
-                        <div>{markerEmployees.employee.firstName}</div>
+                        <div>{"Username: " + employee.userName + " Empleado: " + employee.firstName + " " + employee.lastName + " Lat: " + latitude + " Lng: " + longitude}</div>
                       </InfoWindow>
                     ) : null}
                   </Marker>
