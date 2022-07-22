@@ -102,6 +102,10 @@ const SupervisorDashboard = (props) => {
                       <Employees/> 
                     </Route> 
 
+                    <Route path={ `${path}/zonification`}>
+                      <Zonification/> 
+                    </Route>
+
                     {/**App */}
 
                     <Route path={ `${path}/calendario`}>

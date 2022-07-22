@@ -9,7 +9,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-const Zonification = (props) =>{
+const ZonificationComponent = (props) =>{
 
   const [open, setOpen] = React.useState(false);
 
@@ -264,4 +264,4 @@ return isLoaded ?(
 ) : <></>
 }
 
-export default Zonification;
+export default ZonificationComponent;
