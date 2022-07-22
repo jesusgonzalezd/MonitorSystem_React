@@ -2,17 +2,13 @@ import React from 'react';
 import {Route, Switch} from 'react-router-dom';
 import LoginEmployee from '../components/login/LoginEmployee';
 import Signup from '../components/signup/Signup';
-
 import Zonification from '../components/zonification/Zonification';
 import LoginMonitor from '../components/login/LoginMonitor';
 import LoginSupervisor from '../components/login/LoginSupervisor';
 import Selector from '../components/selector/Selector';
-import RegisterCompany from '../components/register/RegisterCompany';
 import AdminSelector from '../components/adminselector/AdminSelector';
 import SupervisorDashboard from '../components/dashboard/SupervisorDashboard';
-
 import Home from '../components/home/Home';
-
 import CompanyRegister from '../components/register/CompanyRegister';
 import RoleRegister from '../components/register/RoleRegister';
 
