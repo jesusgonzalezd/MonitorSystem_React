@@ -36,6 +36,7 @@ const Tracking = (props) => {
     const [, setError] = useState();
     const [role, setRole] = useState();
     
+   const [disable, setDisable] = useState(false);
   
     
     useEffect(() => {
@@ -145,6 +146,8 @@ const Tracking = (props) => {
               console.log("Muestrame el request")             
               console.log(request);
 
+              request.status === undefined  ? setDisable(false) : setDisable (true);
+              console.log(disable);
           }))
           .catch(function (response) {
             console.log(response);
@@ -170,6 +173,7 @@ const Tracking = (props) => {
             headers: { "Content-Type": "multipart/form-data" },
           })
             .then(function (response) {
+              setDisable(true);
               setsnack({
                 motive: 'success', text: response.data.message, appear: true,
               });
@@ -210,27 +214,25 @@ const Tracking = (props) => {
          <div className="flex flex-col ml-auto justify-between items-start">
             
          {request.id === undefined ? (
-               <button
+               <button 
                type="button"              
-               className="bg-transparent hover:bg-black text-black font-semibold hover:text-white py-2 px-4 border border-black hover:border-transparent rounded"
+               className={` bg-transparent hover:bg-black text-black font-semibold hover:text-white py-2 px-4 border border-black hover:border-transparent rounded`}
                borderRadius="10px"
                size="md"
+               disabled={disable}
                onClick={() => handleRequest()}              
              >Solicitar actualización de posiciones
              </button>
             ) : ( 
               <div className='ml-auto'>
-               <p className="font-bold text-gray-500">Ya cuenta con una Solicitud abierta</p>
-               
+               <p className="font-bold text-gray-500">Ya cuenta con una solicitud abierta</p>
+               <p className="font-bold text-gray-500">espere por la respuesta del monitor</p>
+              <p className="text-1xl mt-2">{request.datecreation}</p>
              </div>
             
-            )}
+            )}           
            
-           
-            <div className='ml-auto'>
-              <p className="font-bold text-gray-500">Solicitud abierta</p>
-              <p className="text-1xl">{request.datecreation}</p>
-            </div>           
+                     
           </div>
           
          
