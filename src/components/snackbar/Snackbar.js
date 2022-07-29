@@ -15,6 +15,7 @@ const CustomizedSnackbars = (props) => {
   useEffect(() => {
     if(props.appear)
       setOpen(true);
+
   }, [props]);
 
   const action = (
