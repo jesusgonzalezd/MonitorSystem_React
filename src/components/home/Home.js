@@ -4,6 +4,7 @@ import {GoogleMap, useLoadScript, Marker, InfoWindow} from "@react-google-maps/a
 import { withRouter, Redirect} from 'react-router-dom';
 import Snackbar from '../snackbar/Snackbar';
 import axios from 'axios';
+import Request_monitor from '../request/Request_monitor';
 
 const Home = (props) =>{
 
@@ -43,7 +44,8 @@ const Home = (props) =>{
           .then((response  => {
 
               var idCompany = response.data.idCompany;
-
+              localStorage.setItem('idCompany', response.data.idCompany);
+    
             setInterval(function() {
               if(role === 'Monitor'){
                     axios.get("https://localhost:44322/api/location/GetAllEmployeesLastLocation/" + idCompany)
@@ -146,6 +148,11 @@ return isLoaded ?(
            {props.location.state !== undefined?
              <div>
               <Header username={props.location.state.username}/>
+                { 
+                  role === 'Monitor' ? 
+                  <Request_monitor username={props.location.state.username} />
+                  : <div></div> 
+                }             
               <GoogleMap
                   mapContainerStyle={mapContainerStyle}
                   zoom={7}

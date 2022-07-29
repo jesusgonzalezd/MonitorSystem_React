@@ -6,6 +6,7 @@ import axios from 'axios';
 import { HeaderTable } from '../components';
 import { Button} from '../components';
 import { useStateContext } from '../context/ContextProvider';
+import Moment from 'react-moment';
 
 const Tracking = (props) => {
 
@@ -58,8 +59,8 @@ const Tracking = (props) => {
                   localStorage.setItem('idCompany', response.data.idCompany);
     
                 setInterval(function() {
-                  if(role === 'Monitor'){
-                        axios.get("https://localhost:44322/api/location/GetAllEmployeesLastLocation/" + idCompany)
+                  if(role === 'Supervisor'){
+                        axios.get("https://localhost:44322/api/location/GetAllEmployeesLastLocationBeforeDate/" + idCompany)
                         .then((response  => {
                             console.log("Prueba");
                             setmarkerEmployees(response.data);
@@ -135,7 +136,7 @@ const Tracking = (props) => {
         }
 
 
-        
+        //Se trae la solicitud de actualización abierta, de haberla
           axios.get("https://localhost:44322/api/request/ObtainLastRequest/" + localStorage.getItem('idCompany'))
           .then((response  => {
             setRequest({
@@ -156,7 +157,7 @@ const Tracking = (props) => {
     
       }, [role, localStorage.getItem('username')]);
     
-      //Función para registro de Request
+      //Función para registro de Request. Se deshabilita el botón una vez se manda la solicitud.
       const handleRequest = () => {
         
           var bodyFormData = new FormData();
@@ -205,7 +206,7 @@ const Tracking = (props) => {
     
       console.log(markerEmployees);
 
-
+      console.log(disable);
   return isLoaded ?(
     <div className="m-2 md:m-10 mt-24 p-2 md:p-10 bg-white rounded-3xl">
         <div class = "grid grid-cols-2 gap-8 content-start p-4">
@@ -227,9 +228,10 @@ const Tracking = (props) => {
               <div className='ml-auto'>
                <p className="font-bold text-gray-500">Ya cuenta con una solicitud abierta</p>
                <p className="font-bold text-gray-500">espere por la respuesta del monitor</p>
-              <p className="text-1xl mt-2">{request.datecreation}</p>
-             </div>
-            
+              <p className="text-1xl mt-2">
+                <Moment format='MMMM Do YYYY, h:mm:ss a'>{request.datecreation}</Moment>
+                </p>
+             </div>            
             )}           
            
                      

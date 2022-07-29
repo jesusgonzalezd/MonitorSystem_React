@@ -144,7 +144,7 @@ const Navbar = (props) => {
           >
             <img
               className="rounded-full w-8 h-8"
-              alt={userin.firstname + " " + userin.lastname} src=""
+              alt={userin.firstname + " " + userin.lastname} src={userin.avatar}
             />
             <p>
               <span className="text-gray-400 text-14">Hi,</span>{' '}
