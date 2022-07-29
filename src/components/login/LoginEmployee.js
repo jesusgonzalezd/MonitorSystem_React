@@ -31,6 +31,10 @@ const [user, setUser] = useState({
  // Cambio en la tarjeta del usuario, cada vez que alguien inicia sesion.
  const handleChange = (e) => {
 
+  setsnack({
+    appear: false,
+  });
+
   // Limites para la contrasena.
   if(e.target.name === 'password' && e.target.value.length > 20)
       return;
@@ -76,12 +80,14 @@ const peticionPost = (username, password) => {
     headers: { "Content-Type": "multipart/form-data" },
   })
     .then(function (response) {
+      console.log("Entro 1");
       setsnack({
         motive: 'success', text: response.data.message, appear: true,
       });
       setLogin(true);
     })
     .catch(function (error) {
+      console.log("Entro 2");
       setsnack({
         motive: 'error', text: error.message, appear: true,
       });
