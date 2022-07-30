@@ -7,11 +7,13 @@ import { RiNotification3Line } from 'react-icons/ri';
 import { MdKeyboardArrowDown } from 'react-icons/md';
 import { TooltipComponent } from '@syncfusion/ej2-react-popups';
 import axios from 'axios'; 
+import { Avatar } from '@mui/material';
 
-import avatar from '../../data/avatar.jpg';
+
 import { useStateContext } from '../../context/ContextProvider';
 import  UserProfile  from '../userprofile/UserProfile';
 
+import RequestMonitor from '../request/RequestMonitor'
 
 const NavButton = ({ title, customFunc, icon, color, dotColor }) => (
   <TooltipComponent content={title} position="BottomCenter">
@@ -47,6 +49,18 @@ const Navbar = (props) => {
     role: ''
   });
 
+   // Hook para almacenar la imagen del usuario.
+   const [avatarC, setAvatar] = useState({
+    image: '',
+    preview: '',
+  });
+
+  const onCrop = (preview) => {
+    avatarC.preview = preview;
+    console.log(preview.name);
+    console.log(avatarC.image.name);
+  }
+
   // Empresa a la cual el usuario logueado trabaja.
   const[namecompany, setNameCompany] = useState();
   
@@ -65,6 +79,7 @@ const Navbar = (props) => {
           role: response.data.role,
         });      
 
+        avatarC.image = response.data.user.avatar;
         /*Se guarda el user y sus datos en LocalStorage */         
         /* localStorage.setItem('username', response.data.user.userName); */
         localStorage.setItem('userdata', JSON.stringify(response.data.user));
@@ -144,10 +159,10 @@ const Navbar = (props) => {
           >
             <img
               className="rounded-full w-8 h-8"
-              alt={userin.firstname + " " + userin.lastname} src={userin.avatar}
+              alt={userin.firstname + " " + userin.lastname} src={onCrop}
             />
             <p>
-              <span className="text-gray-400 text-14">Hi,</span>{' '}
+              <span className="text-gray-400 text-14">Hola,</span>{' '}
               <span className="text-gray-400 font-bold ml-1 text-14">
                 {userin.firstname}
               </span>

@@ -1,12 +1,19 @@
 import React , {useState, useEffect} from 'react';
 import {AppBar, Box, Toolbar, IconButton, Typography, Container, Avatar, Button, Tooltip, Menu, MenuItem, Badge, ThemeProvider, createTheme, styled} from '@mui/material';
-import {DragHandle, AccountBox, Face, PhotoCamera, Logout, Map, ListAlt, ShareLocation, Home, Hail, Business} from '@mui/icons-material';
+import {DragHandle, AccountBox, Face, PhotoCamera, Logout, Map, ListAlt, ShareLocation, FactCheck, Home, Hail, Business} from '@mui/icons-material';
 import axios from 'axios';
 import { Link, withRouter } from 'react-router-dom';
+import { TooltipComponent } from '@syncfusion/ej2-react-popups';
+import { MdKeyboardArrowDown } from 'react-icons/md';
+
+import { useStateContext } from '../../context/ContextProvider';
+import  RequestMonitor  from '../request/RequestMonitor';
 
 const Header = (props) => {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
+
+  const { currentColor, activeMenu, setActiveMenu, handleClick, isClicked, setScreenSize, screenSize } = useStateContext();
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -172,7 +179,7 @@ const Header = (props) => {
                   state: { username: userin.username }
                 }}
                 component={React.forwardRef((props, ref) => <Link innerRef={ref} {...props} />)}
-              ><Home/>Inicio</MenuItem>
+              ><Home/>{' '}Inicio</MenuItem>
               {userin.role === "Supervisor"?
                 <div>
                   <MenuItem
@@ -186,8 +193,17 @@ const Header = (props) => {
                   </div>
                   : <div/>
               }
-              <MenuItem><ListAlt/>Reportes</MenuItem>
-              <MenuItem><ShareLocation/>Ubicaciones</MenuItem>
+               { userin.role === 'Monitor' ? (
+                <MenuItem>
+                    <FactCheck/>{' '}
+                          Solicitudes                      
+                </MenuItem>
+
+              ) : (<div></div>) }
+                
+              <MenuItem><ListAlt/>{' '}Reportes</MenuItem>
+              <MenuItem><ShareLocation/>{' '}Ubicaciones</MenuItem>
+                            
             </Menu>
           </Box>
           
@@ -200,7 +216,7 @@ const Header = (props) => {
                 component={React.forwardRef((props, ref) => <Link innerRef={ref} {...props} />)} 
                 onClick={handleCloseNavMenu}
                 sx={{ my: 2, color: 'white', display: 'block' }}
-              ><Home/>
+              ><Home/>{' '}
                 Inicio
               </Button>
               {userin.role === "Supervisor"?
@@ -213,21 +229,40 @@ const Header = (props) => {
                     component={React.forwardRef((props, ref) => <Link innerRef={ref} {...props} />)}
                     onClick={handleCloseNavMenu}
                     sx={{ my: 2, color: 'white', display: 'block' }}
-                  ><Map/>
+                  ><Map/>{' '}
                     Zonificacion
                   </Button>
               </div> : <div/>
               }
+              {               
+                userin.role === 'Monitor' ? (   
+                     <Button
+                            onClick={() => handleClick('requestMonitor')}
+                            sx={{ my: 2, color: 'white', display: 'block' , 
+                                '&:hover': {
+                                  color: 'teal',
+                                  backgroundColor: 'white',                                
+                               },
+                            }}
+                            ><FactCheck/>{' '}
+                              Solicitudes                                         
+                        </Button>
+              ) : ( <div></div>)
+              
+              }
+              {isClicked.requestMonitor && (<RequestMonitor />)}
+              
               <Button
                 onClick={handleCloseNavMenu}
                 sx={{ my: 2, color: 'white', display: 'block' }}
-              ><ListAlt/>
+              ><ListAlt/>{' '}
                 Reportes
               </Button>
+                  
               <Button
                 onClick={handleCloseNavMenu}
                 sx={{ my: 2, color: 'white', display: 'block' }}
-              ><ShareLocation/>
+              ><ShareLocation/>{' '}
                 Ubicaciones
               </Button>
 

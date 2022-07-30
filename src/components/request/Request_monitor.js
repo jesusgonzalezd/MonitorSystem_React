@@ -4,6 +4,7 @@ import { Link, withRouter } from 'react-router-dom';
 
 import Snackbar from '../snackbar/Snackbar';
 import { useStateContext } from '../../context/ContextProvider';
+import Moment from 'react-moment';
 
 const Request_monitor = (props) => {
 
@@ -54,7 +55,7 @@ const Request_monitor = (props) => {
 }, [props.username]);
 
 
-//Función para registro de Request. Se deshabilita el botón una vez se manda la solicitud.
+//Función para solución de Request. Se deshabilita el botón una vez se modifica la solicitud.
 const handleRequest = () => {
         
     var bodyFormData = new FormData();
@@ -62,11 +63,11 @@ const handleRequest = () => {
     bodyFormData.append('IdCompany', localStorage.getItem('idCompany'));        
   
     console.log("Muestrame lo que guardo")             
-    console.log(bodyFormData.getAll('IdCompany'));
+    console.log(bodyFormData.getAll('IdCompany')+request.id + localStorage.getItem('idCompany') );
   
     axios({
       method: "put",
-      url: "https://localhost:44322/api/request/update/"+ request.id + localStorage.getItem('idCompany'),
+      url: "https://localhost:44322/api/request/update/"+ localStorage.getItem('idCompany'),
       data: bodyFormData,
       headers: { "Content-Type": "multipart/form-data" },
     })
@@ -93,7 +94,9 @@ const handleRequest = () => {
                 {request.id !== undefined ?
                  <div>
                     <p className="font-bold text-gray-600">Solicitud pendiente con fecha:</p>
-                    <p className="text-2xl">{request.datecreation}</p>
+                    <p className="text-2xl">
+                    <Moment format='MMMM Do YYYY, h:mm:ss a'>{request.datecreation}</Moment>
+                    </p>
                  </div>
                  : <div/>
                 }               

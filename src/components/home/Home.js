@@ -4,7 +4,7 @@ import {GoogleMap, useLoadScript, Marker, InfoWindow} from "@react-google-maps/a
 import { withRouter, Redirect} from 'react-router-dom';
 import Snackbar from '../snackbar/Snackbar';
 import axios from 'axios';
-import Request_monitor from '../request/Request_monitor';
+import Moment from 'react-moment';
 
 const Home = (props) =>{
 
@@ -147,12 +147,7 @@ return isLoaded ?(
         <div>
            {props.location.state !== undefined?
              <div>
-              <Header username={props.location.state.username}/>
-                { 
-                  role === 'Monitor' ? 
-                  <Request_monitor username={props.location.state.username} />
-                  : <div></div> 
-                }             
+              <Header username={props.location.state.username}/>                           
               <GoogleMap
                   mapContainerStyle={mapContainerStyle}
                   zoom={7}

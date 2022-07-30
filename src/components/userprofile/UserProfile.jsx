@@ -13,8 +13,7 @@ const UserProfile = (props) => {
 
   
   let details = JSON.parse(localStorage.getItem('userdata'));
-
-  console.log(details.firstName)
+ 
 
   const handleLogout = () => {
 
