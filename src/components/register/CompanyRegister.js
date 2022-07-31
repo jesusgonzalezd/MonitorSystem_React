@@ -80,6 +80,10 @@ const CompanyRegister = (props) => {
   // Evento HandleChange para modificar y asignar los datos al Hook.
   const handleChange = (e) => {
       
+      setsnack({
+        appear: false,
+      });
+
       if(e.target.name === 'Email' && e.target.value.length > 64)
           return;
   

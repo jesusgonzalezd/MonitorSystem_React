@@ -56,6 +56,10 @@ const CompanyRegister = () => {
   // Evento HandleChange para modificar y asignar los datos al Hook.
   const handleChange = (e) => {
       
+      setsnack({
+        appear: false,
+      });
+
       // Limites para el nombre y apellido.
       if(e.target.name === 'Name')
         if(e.target.value.length > 20)
