@@ -27,6 +27,7 @@ const RequestMonitor = (props) => {
     });
 
 
+    //Función para animación Lottie
     const defaultOptions = {
       loop: false,
       autoplay: true,
@@ -151,6 +152,10 @@ const RequestMonitor = (props) => {
                   </div> 
             </div>
         }
+        {snack.appear?
+              <div> <Snackbar motive={snack.motive} text={snack.text} appear={snack.appear}/> </div>
+              : <div/>
+          }
         </div>
     
       );

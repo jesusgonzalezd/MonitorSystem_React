@@ -81,7 +81,7 @@ const Navbar = (props) => {
 
         avatarC.image = response.data.user.avatar;
         /*Se guarda el user y sus datos en LocalStorage */         
-        /* localStorage.setItem('username', response.data.user.userName); */
+      
         localStorage.setItem('userdata', JSON.stringify(response.data.user));
       }))
       .catch(function (response) {
