@@ -4,13 +4,21 @@ import {GoogleMap, useLoadScript, Marker, InfoWindow} from "@react-google-maps/a
 import Snackbar from '../components/snackbar/Snackbar';
 import axios from 'axios';
 import { HeaderTable } from '../components';
-
+import { Button} from '../components';
+import { useStateContext } from '../context/ContextProvider';
+import Moment from 'react-moment';
 
 const Tracking = (props) => {
 
+    const { setCurrentColor, setCurrentMode, currentMode, currentUser, setUserCurrent, activeMenu, currentColor, themeSettings, setThemeSettings } = useStateContext();
 
     const [location, setLocation] = useState();
 
+    const [request,setRequest] = useState({
+      id: '',
+      status: '',
+      datecreation: ''
+      });
     // Contenido del Snackbar.
     const[snack, setsnack] = useState({});
   
@@ -28,11 +36,10 @@ const Tracking = (props) => {
     const [, setAccuracy] = useState();
     const [, setError] = useState();
     const [role, setRole] = useState();
+    
+   const [disable, setDisable] = useState(false);
   
-    let details = JSON.parse(localStorage.getItem('userdata'));
-
-    console.log(details.firstname);
-
+    
     useEffect(() => {
 
         // Traera el role del usuario logueado mediante su username.
@@ -49,10 +56,11 @@ const Tracking = (props) => {
               .then((response  => {
     
                   var idCompany = response.data.idCompany;
+                  localStorage.setItem('idCompany', response.data.idCompany);
     
                 setInterval(function() {
-                  if(role === 'Monitor'){
-                        axios.get("https://localhost:44322/api/location/GetAllEmployeesLastLocation/" + idCompany)
+                  if(role === 'Supervisor'){
+                        axios.get("https://localhost:44322/api/location/GetAllEmployeesLastLocationBeforeDate/" + idCompany)
                         .then((response  => {
                             console.log("Prueba");
                             setmarkerEmployees(response.data);
@@ -126,9 +134,58 @@ const Tracking = (props) => {
                   };
                 }
         }
+
+
+        //Se trae la solicitud de actualización abierta, de haberla
+          axios.get("https://localhost:44322/api/request/ObtainLastRequest/" + localStorage.getItem('idCompany'))
+          .then((response  => {
+            setRequest({
+              id: response.data.idRequest,
+              status: response.data.status,
+              datecreation: response.data.dateCreation              
+            });
+              console.log("Muestrame el request")             
+              console.log(request);
+
+              request.status === undefined  ? setDisable(false) : setDisable (true);
+              console.log(disable);
+          }))
+          .catch(function (response) {
+            console.log(response);
+          });  
+        
     
       }, [role, localStorage.getItem('username')]);
     
+      //Función para registro de Request. Se deshabilita el botón una vez se manda la solicitud.
+      const handleRequest = () => {
+        
+          var bodyFormData = new FormData();
+        
+          bodyFormData.append('IdCompany', localStorage.getItem('idCompany'));        
+        
+          console.log("Muestrame lo que guardo")             
+          console.log(bodyFormData.getAll('IdCompany'));
+        
+          axios({
+            method: "post",
+            url: "https://localhost:44322/api/request/register",
+            data: bodyFormData,
+            headers: { "Content-Type": "multipart/form-data" },
+          })
+            .then(function (response) {
+              setDisable(true);
+              setsnack({
+                motive: 'success', text: response.data.message, appear: true,
+              });
+            })
+            .catch(function (error) {
+              setsnack({
+                motive: 'error', text: error.message, appear: true,
+              });
+            });
+         
+      };
 
       const onMapClicked = (coord) => {
         const latitude = coord.latLng.lat();
@@ -149,11 +206,44 @@ const Tracking = (props) => {
     
       console.log(markerEmployees);
 
+      console.log(disable);
 
+      
   return isLoaded ?(
     <div className="m-2 md:m-10 mt-24 p-2 md:p-10 bg-white rounded-3xl">
+        <div class = "grid grid-cols-2 gap-8 content-start p-4">
         <HeaderTable category="Servicio" title="Tracking" />
-        <div>
+        
+         <div className="flex flex-col ml-auto justify-between items-start">
+            
+         {request.id === undefined ? (
+               <button 
+               type="button"              
+               className={` bg-transparent hover:bg-black text-black font-semibold hover:text-white py-2 px-4 border border-black hover:border-transparent rounded`}
+               borderRadius="10px"
+               size="md"
+               disabled={disable}
+               onClick={() => handleRequest()}              
+             >Solicitar actualización de posiciones
+             </button>
+            ) : ( 
+              <div className='ml-auto'>
+               <p className="font-bold text-gray-500">Ya cuenta con una solicitud abierta</p>
+               <p className="font-bold text-gray-500">espere por la respuesta del monitor</p>
+              <p className="text-1xl mt-2">
+                <Moment format='MMMM Do YYYY, h:mm:ss a'>{request.datecreation}</Moment>
+                </p>
+             </div>            
+            )}           
+           
+                     
+          </div>
+          
+         
+
+        </div>
+
+        <div>       
            {props.location.state !== undefined?
              <div>             
               <GoogleMap

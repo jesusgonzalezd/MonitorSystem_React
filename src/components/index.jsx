@@ -20,5 +20,6 @@ export { default as Selector } from './selector/Selector';
 export { default as Signup } from './signup/Signup';
 export { default as Zonification } from './zonification/ZonificationComponent';
 export { default as Button } from './button/Button';
+export { default as RequestMonitor } from './request/RequestMonitor';
 
 export { default as Home } from './home/Home';
