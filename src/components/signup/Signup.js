@@ -1,5 +1,8 @@
 import React, {useState, useEffect, useRef} from 'react';
 import {Avatar, Button, TextField, FormControlLabel, Checkbox, Link, Paper, Box, Grid, Typography, CssBaseline, createTheme, ThemeProvider, CircularProgress, FormControl, InputLabel, Select, MenuItem} from '@mui/material';
+import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { TimePicker } from '@mui/x-date-pickers/TimePicker';
 import { Link as RouterLink, withRouter} from 'react-router-dom';
 import AvatarEdit from 'react-avatar-edit';
 import axios from 'axios';
@@ -16,7 +19,8 @@ const Signup = (props) => {
     },
   });
 
-   // Hook para almacenar la imagen del usuario.
+
+     // Hook para almacenar la imagen del usuario.
    const [avatarC, setAvatar] = useState({
     image: '',
     preview: '',
@@ -32,6 +36,8 @@ const Signup = (props) => {
     Password: '',
     Company: '',
     Role: '',
+    StartTime: '',
+    FinishTime: ''
   });
 
   // Hook para almacenar la direccion de correo del usuario.
@@ -39,6 +45,13 @@ const Signup = (props) => {
   const [department, setDepartment] = useState(null);
   const [company, setCompany] = useState(null);
   const[role, setRole] = useState(null);
+
+  //Hook para almacenar hora de entrada
+  const [startTime, setStartTime] = useState(null);
+
+  //Hook para almacenar hora de salida
+  const [finishTime, setFinishTime] = useState(null);
+
 
   // Hook para mostrar el progress o boton de registrar.
   const [showProgress, setshowProgress] = useState(false);
@@ -68,6 +81,10 @@ const Signup = (props) => {
     bodyFormData.append('Password', user.Password);
     bodyFormData.append('IdCompany', user.Company + company);
     bodyFormData.append('IdRole', user.Role + role);
+    bodyFormData.append('StartTime', user.StartTime + startTime._d.toTimeString());
+    bodyFormData.append('FinishTime', user.FinishTime + finishTime._d.toTimeString());
+
+    console.log("Tiempo que guardo"+finishTime+" < "+user.FinishTime+" > "+finishTime._d.toTimeString());
 
     axios({
       method: "post",
@@ -131,6 +148,8 @@ const Signup = (props) => {
         })
   }, []);
 
+
+ 
   // Evento HandleChange para modificar y asignar los datos al Hook.
   const handleChange = (e) => {
 
@@ -166,8 +185,9 @@ const Signup = (props) => {
   
       // Validación del campo contraseña.
       if(e.target.name === 'Password')
-        if((key > 126 || key === 32)) return;
-      
+        if((key > 126 || key === 32)) return;      
+            
+        
       // Almacenando el usuario en el Hook.
       setUser({
         ...user,
@@ -244,6 +264,16 @@ const handleModifiedRoles = (event) => {
   console.log(event.target.value);
   setRole(event.target.value);
 };
+
+const handleModifiedStartTime = (event) => {
+  console.log(event._d.toTimeString());
+  setStartTime(event);
+}
+
+const handleModifiedFinishTime = (event) => {
+  console.log(event._d.toTimeString());
+  setFinishTime(event);
+}
 
   return (
     <ThemeProvider theme={darkTheme}>
@@ -437,6 +467,29 @@ const handleModifiedRoles = (event) => {
                   onChange={handleChange}
                 />
               </Grid>
+              <Grid item xs={12} sm={6}>
+                <LocalizationProvider dateAdapter={AdapterMoment}>
+                  <TimePicker
+                    id="StartTime"
+                    label="Hora de Entrada"
+                    value={startTime}
+                    onChange={handleModifiedStartTime}
+                    renderInput={(params) => <TextField {...params} />}
+                  />
+                </LocalizationProvider>                
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <LocalizationProvider dateAdapter={AdapterMoment}>
+                  <TimePicker
+                    id="FinishTime"
+                    label="Hora de Salida"
+                    value={finishTime}
+                    onChange={handleModifiedFinishTime}
+                    renderInput={(params) => <TextField {...params} />}
+                  />
+                </LocalizationProvider>                
+              </Grid>
+
               <Grid item xs={12}>
                 <FormControlLabel
                   control={<Checkbox value="allowExtraEmails" color="primary" />}

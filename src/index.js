@@ -1,14 +1,25 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import ReactDOM from 'react-dom/client';
 import './index.css';
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter } from 'react-router-dom'
 import Routes from './routes/Routes';
 
-
-//import App from './App';
-
 import {ContextProvider} from './context/ContextProvider';
+
+const root = ReactDOM.createRoot(document.getElementById("root"));
+
+ root.render(
+  <React.StrictMode>
+    <ContextProvider>
+        <BrowserRouter>
+        <div>
+            <Routes />
+        </div>
+      </BrowserRouter>
+    </ContextProvider>
+  </React.StrictMode>  
+);  
 
 
  /* ReactDOM.render(
@@ -16,9 +27,10 @@ import {ContextProvider} from './context/ContextProvider';
     <App/>
   </ContextProvider>,
   document.getElementById('root')
-);*/   
- 
- ReactDOM.render(
+
+
+
+  ReactDOM.render(
   <ContextProvider>
     <BrowserRouter>
     <div>
@@ -28,6 +40,7 @@ import {ContextProvider} from './context/ContextProvider';
  </ContextProvider>,
   document.getElementById('root')
 );  
+);*/  
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))
