@@ -1,6 +1,5 @@
 import React, {useEffect, useState, useRef, useCallback, useMemo} from 'react';
 import { HeaderTable } from '../components';
-import { withRouter, Redirect} from 'react-router-dom';
 import {GoogleMap, Polygon, useLoadScript, Marker} from "@react-google-maps/api";
 import {Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Slide, Grid, TextField} from '@mui/material';
 import Snackbar from '../components/snackbar/Snackbar';
@@ -9,13 +8,22 @@ const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-
+<<<<<<< Updated upstream
+const Zonification = () => {
+=======
 const Zonification = (props) => {
+>>>>>>> Stashed changes
 
   const [open, setOpen] = React.useState(false);
 
   // Contenido del Snackbar.
-  const[snack, setsnack] = useState({});
+<<<<<<< Updated upstream
+  const[snack,] = useState({});
+
+  const [, setPosition] = useState();
+=======
+  const[snack, ] = useState({});
+>>>>>>> Stashed changes
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -25,51 +33,33 @@ const Zonification = (props) => {
     setOpen(false);
   };
 
-  const [location, setLocation] = useState();
+<<<<<<< Updated upstream
+  const [location,] = useState();
+=======
+  const [location, ] = useState();
+>>>>>>> Stashed changes
 
   const[namezone, setNamezone] = useState("");
+
+  const[, setPosition] = useState();
 
   const mapContainerStyle = {
     width: '100%',
     height: '100vh',
   };
 
-
   useEffect(() => {
+<<<<<<< Updated upstream
+   
+=======
 
-    if (navigator.geolocation) {
-        navigator.geolocation.watchPosition(function(position) {
-
-          setInterval(() => {
-            setLocation({
-              lat: position.coords.latitude,
-              lng: position.coords.longitude,
-            });
-          }, 5000);
-
-          setsnack({
-              motive: 'success', text: "Posicion Actualizada", appear: true,
-          });
-          },  error => {
-          setsnack({
-              motive: 'error', text: error.code, appear: true,
-          });
-          },{
-              enableHighAccuracy: true,
-              maximumAge: 0,
-          });
-    }
-    
-    // Manejo de perdida de memoria - Funcion de limpieza
-    return () => {
-      setLocation({});
-    };
+>>>>>>> Stashed changes
   }, []);
   
   // Code Stack
   const [path, setPath] = useState([]);
 
-  const [active, ] = useState(false);
+  const [active, setActive] = useState(false);
 
   const [zones, setZones] = useState([]);
 
@@ -94,8 +84,6 @@ const Zonification = (props) => {
     googleMapsApiKey: "AIzaSyAL1SkGABwvcHm8nZ6c1xlNCNVcnCi9ye8"
   })
 
-  //const [, setMap] = React.useState(null)
-
   // Clean up refs
   const onUnmount = useCallback(() => {
     listenersRef.current.forEach(lis => lis.remove());
@@ -103,12 +91,6 @@ const Zonification = (props) => {
   }, []);
 
   console.log("The path state is", path);
-
-  /*const onLoad_ = React.useCallback(function callback(map) {
-    const bounds = new window.google.maps.LatLngBounds();
-    map.fitBounds(bounds);
-    setMap(map)
-  }, [])*/
 
   // Bind refs to current Polygon and listeners
   const onLoad = useCallback(
@@ -128,7 +110,7 @@ const Zonification = (props) => {
       setZones(zones => [...zones, path]);
   }
 
-  /*const handleAddNewZone = (coord) => {
+  const handleAddNewZone = (coord) => {
     const { latLng } = coord;
 
     const latitude = latLng.lat();
@@ -146,7 +128,7 @@ const Zonification = (props) => {
     ])
 
     setActive(true);
-  }*/
+  }
 
   console.log(zones);
 
@@ -158,17 +140,6 @@ const Zonification = (props) => {
   });
 };
 
-// Referencia del Mapa para obtener sus atributos.
-//const mapRef = useRef(null);
-
-//Funcion para fijar el mapa en la ubicacion de la creacion de la nueva zona laboral.
-/*const handleCenter = () => {
-  if (!mapRef.current) return;
-
-  const newPos = mapRef.current.getCenter().toJSON();
-  setPosition(newPos);
-}*/
-
 const center = useMemo(() => ({lat: 18.762391, lng: -69.439192}), []);
 
   return isLoaded ?(
@@ -178,6 +149,8 @@ const center = useMemo(() => ({lat: 18.762391, lng: -69.439192}), []);
         mapContainerStyle={mapContainerStyle}
         zoom={7}
         center = {center}
+        onUnmount={onUnmount}
+        onClick={handleAddNewZone}
       >
         <Grid container spacing={0} direction="column-reverse" alignItems="center" justifyContent="center">
           <Button variant="contained" onClick={handleClickOpen}>
@@ -216,10 +189,6 @@ const center = useMemo(() => ({lat: 18.762391, lng: -69.439192}), []);
         <Marker
             position={location}
             animation={window.google.maps.Animation.BOUNCE}
-            /*icon={{url: '',
-                  anchor: window.google.maps.Point(17, 46),
-                  scaledSize: window.google.maps.Size(37, 37),
-            }}*/
         />
 
         {active?
