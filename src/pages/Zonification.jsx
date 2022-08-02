@@ -8,22 +8,12 @@ const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-<<<<<<< Updated upstream
 const Zonification = () => {
-=======
-const Zonification = (props) => {
->>>>>>> Stashed changes
 
   const [open, setOpen] = React.useState(false);
 
   // Contenido del Snackbar.
-<<<<<<< Updated upstream
   const[snack,] = useState({});
-
-  const [, setPosition] = useState();
-=======
-  const[snack, ] = useState({});
->>>>>>> Stashed changes
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -33,11 +23,7 @@ const Zonification = (props) => {
     setOpen(false);
   };
 
-<<<<<<< Updated upstream
   const [location,] = useState();
-=======
-  const [location, ] = useState();
->>>>>>> Stashed changes
 
   const[namezone, setNamezone] = useState("");
 
@@ -49,11 +35,7 @@ const Zonification = (props) => {
   };
 
   useEffect(() => {
-<<<<<<< Updated upstream
    
-=======
-
->>>>>>> Stashed changes
   }, []);
   
   // Code Stack
